@@ -7,16 +7,34 @@ body {
 .header {
     background-color: #ff69b4;
     padding: 1rem;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: white;
+    width: 100%;
 }
 
-.nav a {
-    margin: 0 1rem;
-    color: white;
-    text-decoration: none;
+.buttonright {
+    justify-content: flex-start;
+    display: flex;
+    gap: 0.5rem; /* Ajusta o espaçamento entre os botões */
+}
+
+.buttonleft {
+    display: flex;
+    justify-content: flex-end;
+
+}
+
+.logo {
+    flex-grow: 1;
+    text-align: center;
 }
 
 .customer-support {
@@ -26,6 +44,19 @@ body {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.search-bar {
+    width: 50%; /* Ajustado para ser menor */
+    background-color: #f0f0f0;
+    margin: 1rem auto; /* Centraliza a barra de pesquisa */
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
 .hero {
