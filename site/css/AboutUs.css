@@ -36,7 +36,14 @@ body {
     flex-grow: 1;
     text-align: center;
 }
-
+.primeira {
+    background-color: #000000;
+    padding: 1rem;
+    color: rgb(0, 0, 0);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 .customer-support {
     background-color: white;
     color: #ff69b4;
@@ -57,27 +64,6 @@ body {
     padding: 0.5rem;
     border: 1px solid #ccc;
     border-radius: 5px;
-}
-
-.hero {
-    background-color: #f0f0f0;
-    padding: 2rem;
-    text-align: center;
-}
-
-.hero-content {
-    display: flex;
-    justify-content: space-around;
-}
-
-.hero-image {
-    text-align: center;
-}
-
-.hero-image img {
-    width: 350px;
-    height: 200px;
-    border-radius: 10px;
 }
 
 .btn {

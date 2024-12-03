@@ -59,27 +59,6 @@ body {
     border-radius: 5px;
 }
 
-.hero {
-    background-color: #f0f0f0;
-    padding: 2rem;
-    text-align: center;
-}
-
-.hero-content {
-    display: flex;
-    justify-content: space-around;
-}
-
-.hero-image {
-    text-align: center;
-}
-
-.hero-image img {
-    width: 350px;
-    height: 200px;
-    border-radius: 10px;
-}
-
 .btn {
     margin-top: 1rem;
     background-color: #ff69b4;
@@ -107,6 +86,9 @@ body {
     width: 250px;
     text-align: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.promo{
+    color:red;
 }
 
 .promo-card img {
