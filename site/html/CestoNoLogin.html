@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mercado Machado</title>
+    <link rel="stylesheet" href="/site/css/CestoNoLogin.css">
+</head>
+
+<body>
+ 
+    <header class="header">
+        <div class="container">
+            <div class="buttonright">
+                <button class="customer-support" href="#about">About Us</button>
+                <button class="customer-support" href="#folheto">Folheto</button>
+                <button class="customer-support" href="#lojas">Lojas</button>
+            </div>
+            <div class="logo">
+                <h1>Mercado Machado</h1>
+            </div>
+            <div class="buttonleft">
+                <button class="customer-support">Apoio ao Cliente</button>
+                <button class="customer-support" href="#Login">Login</button>
+            </div>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Pesquisar">
+        </div>
+    </header>
+    <h1>Carrinho de Compras</h1>
+    <style>
+      h1 {
+        text-align: center;
+        color: white; /* Define a cor do texto como branco */
+      }
+  
+      body {
+        background-color: #000000; /* Fundo escuro para contraste */
+      }
+    </style>
+    <section class="promo-section">
+        <div class="promo-card">
+            <img src="https://via.placeholder.com/150x150" alt="Promo Image">
+            <div class="card-content">
+                <div class="title">Batatas</div>
+                <div class="description">Descrição: dasbdkjsahkaskkaaskabs</div>
+                    <div class="juntos">
+                    <button class="cancel-button">Cancel</button>
+                    <div>                   
+                        <button class="decrement">-</button>
+                        <span class="quantity">1</span>
+                        <button class="increment">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="promo-card">
+            <img src="https://via.placeholder.com/150x150" alt="Promo Image">
+            <div class="card-content">
+                <div class="title">Batatas</div>
+                <div class="description">Descrição: dasbdkjsahkaskkaaskabs</div>
+                    <div class="juntos">
+                    <button class="cancel-button">Cancel</button>
+                    <div>                   
+                        <button class="decrement">-</button>
+                        <span class="quantity">1</span>
+                        <button class="increment">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="promo-card">
+            <img src="https://via.placeholder.com/150x150" alt="Promo Image">
+            <div class="card-content">
+                <div class="title">Batatas</div>
+                <div class="description">Descrição: dasbdkjsahkaskkaaskabs</div>
+                    <div class="juntos">
+                    <button class="cancel-button">Cancel</button>
+                    <div>                   
+                        <button class="decrement">-</button>
+                        <span class="quantity">1</span>
+                        <button class="increment">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+<div class="compra">
+    <button class="customer-support" href="#cesto" style="background-color: green;">
+        <img src="/site/img/Vector.png" alt="cesto" style="width: 20px; height: 20px; background-color: green;" >
+    </button>
+</div>  
+    <script>
+        // Seleciona todos os botões de incremento e decremento
+        const decrementButtons = document.querySelectorAll('.decrement');
+        const incrementButtons = document.querySelectorAll('.increment');
+
+        // Adiciona evento a todos os botões de decremento
+        decrementButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const card = button.closest('.promo-card'); // Seleciona o card onde o botão foi clicado
+                const quantityDisplay = card.querySelector('.quantity'); // Encontra o contador dentro do card
+                let quantity = parseInt(quantityDisplay.textContent); // Converte o valor para número
+                
+                if (quantity > 1) {
+                    quantity--;
+                    quantityDisplay.textContent = quantity; // Atualiza o valor
+                }
+            });
+        });
+
+        // Adiciona evento a todos os botões de incremento
+        incrementButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const card = button.closest('.promo-card'); // Seleciona o card onde o botão foi clicado
+                const quantityDisplay = card.querySelector('.quantity'); // Encontra o contador dentro do card
+                let quantity = parseInt(quantityDisplay.textContent); // Converte o valor para número
+                
+                quantity++;
+                quantityDisplay.textContent = quantity; // Atualiza o valor
+            });
+        });
+    </script>
+</body>
+</html>
