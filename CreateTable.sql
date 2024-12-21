@@ -26,8 +26,8 @@ CREATE TABLE Funcionario
 
 CREATE TABLE Caixa
 (
-    Id_Caixa    INT             PRIMARY KEY,
-    Saldo       DECIMAL(100,2)  DEFAULT(0)
+    Id_Caixa    INT IDENTITY(1,1)    PRIMARY KEY,
+    Saldo       DECIMAL(100,2)       DEFAULT(0)
 )
 
 CREATE TABLE Categoria
@@ -44,7 +44,7 @@ CREATE TABLE Produto
     Id_Produto         INT IDENTITY(1,1)   PRIMARY KEY         NOT NULL,
     Nome_Produto       VARCHAR(25)                             NOT NULL,
     Preco_Produto      DECIMAL(5,2)        DEFAULT(0.00)       NOT NULL,
-    Id_Subcategoria    INT                                     NOT NULL,
+    Id_Subcategoria    INT,
     Quantidade         INT                 DEFAULT(0),
 
     CONSTRAINT FK_Produto_Categoria FOREIGN KEY (Id_Subcategoria) REFERENCES Categoria (Id_Subcategoria)
