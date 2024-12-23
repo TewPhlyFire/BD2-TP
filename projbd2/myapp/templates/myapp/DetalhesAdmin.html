@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/site/css/DetalhesAdmin.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>Mercado Machado</h1>
+            </div>
+        </div>
+    </header>
+    <main class="content">
+        <form class="edit-product-form">
+            <div class="form-group">
+                <label for="product-name">Nome</label>
+                <input type="text" id="product-name" name="name" placeholder="Nome do produto" required>
+            </div>
+            <div class="form-group">
+                <label for="product-description">Descrição</label>
+                <textarea id="product-description" name="description" rows="4" placeholder="Descrição do produto"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="product-quantity">Quantidade em Estoque</label>
+                <input type="number" id="product-quantity" name="quantity" placeholder="0" min="0" required>
+            </div>
+            <div class="form-group">
+                <label for="product-price">Preço</label>
+                <input type="number" id="product-price" name="price" placeholder="0.00" min="0" step="0.01" required>
+            </div>
+            <div class="form-group">
+                <label for="product-category">Categoria</label>
+                <select id="product-category" name="category">
+                    <option value="alimentos">Alimentos</option>
+                    <option value="bebidas">Bebidas</option>
+                    <option value="limpeza">Produtos de Limpeza</option>
+                    <option value="higiene">Higiene Pessoal</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="product-image">Imagem</label>
+                <input type="file" id="product-image" name="image" accept="image/*">
+            </div>
+            <div class="form-buttons">
+                <button type="submit" class="add-button">Salvar</button>
+                <button type="reset" class="remove-button">Cancelar</button>
+            </div>
+        </form>
+    </main>
+</body>
+</html>

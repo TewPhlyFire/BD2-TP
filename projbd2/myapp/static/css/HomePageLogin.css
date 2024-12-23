@@ -1,0 +1,125 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+}
+
+.header {
+    background-color: #ff69b4;
+    padding: 1rem;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.buttonright {
+    justify-content: flex-start;
+    display: flex;
+    gap: 0.5rem; /* Ajusta o espaçamento entre os botões */
+}
+
+.buttonleft {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.logo {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.customer-support {
+    background-color: white;
+    color: #ff69b4;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.search-bar {
+    width: 50%; /* Ajustado para ser menor */
+    background-color: #f0f0f0;
+    margin: 1rem auto; /* Centraliza a barra de pesquisa */
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.hero {
+    background-color: #f0f0f0;
+    padding: 2rem;
+    text-align: center;
+}
+
+.hero-content {
+    display: flex;
+    justify-content: space-around;
+}
+
+.hero-image {
+    text-align: center;
+}
+
+.hero-image img {
+    width: 350px;
+    height: 200px;
+    border-radius: 10px;
+}
+
+.btn {
+    margin-top: 1rem;
+    background-color: #ff69b4;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.promo-section {
+    background-color: black;
+    padding: 2rem;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.promo-card {
+    background-color: white;
+    color: black;
+    padding: 1rem;
+    margin: 1rem;
+    border-radius: 10px;
+    width: 250px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.promo-card img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.promo-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 1rem;
+}
