@@ -13,17 +13,16 @@
     <header class="header">
         <div class="container">
             <div class="buttonright">
-                <button class="customer-support" href="#about">About Us</button>
-                <button class="customer-support" href="#folheto">Folheto</button>
-                <button class="customer-support" href="#lojas">Lojas</button>
+                <a class="customer-support" href="{% url 'about_us' %}">About Us</a>
+                <a class="customer-support" href="{% url 'folheto' %}">Folheto</a>
             </div>
             <div class="logo">
                 <h1>Mercado Machado</h1>
             </div>
             <div class="buttonleft">
-                <button class="customer-support">Apoio ao Cliente</button>
-                <button class="customer-support" href="#cesto"><img src="/site/img/Vector.png" alt="
-                    cesto" style="width: 20px; height: 20px;" ></button>
+                <a class="customer-support">Apoio ao Cliente</a>
+                <a class="customer-support" href="{% url 'cesto' %}"><img src="{% static 'img/Vector.png' %}" alt="
+                    cesto" style="width: 20px; height: 20px;" ></a>
             </div>
         </div>
         <div class="search-bar">
@@ -89,8 +88,8 @@
         </div>
     </section>
 <div class="compra">
-    <button class="customer-support" href="#cesto" style="background-color: green;">
-        <img src="/site/img/Vector.png" alt="cesto" style="width: 20px; height: 20px; background-color: green;" >
+    <a class="customer-support" href="#cesto" style="background-color: green;">
+        <img src="{% static 'img/Vector.png' %}" alt="cesto" style="width: 20px; height: 20px; background-color: green;" >
     </button>
 </div>  
     <script>
