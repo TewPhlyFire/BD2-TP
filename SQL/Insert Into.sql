@@ -55,6 +55,17 @@ VALUES
     'Telemoveis'
 );
 
+INSERT INTO Categoria 
+(
+    Id_Subcategoria, 
+    Nome_Categoria
+)
+VALUES 
+(
+    1, 
+    'Computadores'
+);
+
 --Caixa
 INSERT INTO Caixa
 (
@@ -75,11 +86,27 @@ INSERT INTO Produto
 )
 VALUES 
 (
-    'Samsung Galaxy A54 5G', 
-    399.99, 
+    'Sony Xperia 5', 
+    489.99, 
     1, 
     8
 );
+
+INSERT INTO Produto 
+(
+    Nome_Produto, 
+    Preco_Produto, 
+    Id_Subcategoria, 
+    Quantidade
+)
+VALUES 
+(
+    'Microsoft Surface Pro 7', 
+    850.00, 
+    2, 
+    2
+);
+
 
 --Pedido
 INSERT INTO Pedido 
