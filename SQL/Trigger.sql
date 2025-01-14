@@ -25,12 +25,7 @@ BEGIN
         WHERE Produto.Quantidade < 0
     )
         BEGIN
-            THROW 50000, 'Operação abortada', 1;
-            ROLLBACK;
-        END
-    ELSE
-        BEGIN
-            COMMIT;
-        END   
-    END     
+        ROLLBACK TRANSACTION;
+        THROW 50000, 'Operação abortada', 1;
+    END
 END;
