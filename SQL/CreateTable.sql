@@ -41,13 +41,13 @@ CREATE TABLE Categoria
 
 CREATE TABLE Produto
 (
-    Id_Produto         INT IDENTITY(1,1)   PRIMARY KEY         NOT NULL,
-    Nome_Produto       VARCHAR(25)                             NOT NULL,
-    Preco_Produto      DECIMAL(5,2)        DEFAULT(0.00)       NOT NULL,
-    Id_Subcategoria    INT,
-    Quantidade         INT                 DEFAULT(0),
+    Id_Produto             INT IDENTITY(1,1)   PRIMARY KEY         NOT NULL,
+    Nome_Produto           VARCHAR(25)                             NOT NULL,
+    Preco_Produto          DECIMAL(5,2)        DEFAULT(0.00)       NOT NULL,
+    Id_Categoria_Parent    INT,
+    Quantidade             INT                 DEFAULT(0),
 
-    CONSTRAINT FK_Produto_Categoria FOREIGN KEY (Id_Subcategoria) REFERENCES Categoria (Id_Subcategoria)
+    CONSTRAINT FK_Produto_Categoria FOREIGN KEY (Id_Categoria_Parent) REFERENCES Categoria (Id_Categoria_Parent)
 )
 
 CREATE TABLE Pedido
