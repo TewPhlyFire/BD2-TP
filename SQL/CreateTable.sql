@@ -27,27 +27,27 @@ CREATE TABLE Funcionario
 CREATE TABLE Caixa
 (
     Id_Caixa    INT IDENTITY(1,1)    PRIMARY KEY,
-    Saldo       DECIMAL(100,2)       DEFAULT(0)
+    Saldo       DECIMAL(10,2)       DEFAULT(0)
 )
 
-CREATE TABLE Categoria
-(
-    Id_Categoria        INT IDENTITY(1,1)   PRIMARY KEY     NOT NULL,
-    Id_Categoria_Parent INT,
-    Nome_Categoria      VARCHAR(15)                         NOT NULL,
-
-    CONSTRAINT ID_SubCat FOREIGN KEY (Id_Categoria) REFERENCES Categoria (Id_Categoria)
+CREATE TABLE Categoria 
+( 
+	Id_Categoria			INT IDENTITY(1,1)	PRIMARY KEY NOT NULL, 
+	Id_Categoria_Parent		INT, 
+	Nome_Categoria			VARCHAR(15)						NOT NULL, 
+	
+	CONSTRAINT FK_SubCat FOREIGN KEY (Id_Categoria_Parent) REFERENCES Categoria (Id_Categoria)
 )
 
-CREATE TABLE Produto
-(
-    Id_Produto             INT IDENTITY(1,1)   PRIMARY KEY         NOT NULL,
-    Nome_Produto           VARCHAR(25)                             NOT NULL,
-    Preco_Produto          DECIMAL(5,2)        DEFAULT(0.00)       NOT NULL,
-    Id_Categoria_Parent    INT,
-    Quantidade             INT                 DEFAULT(0),
-
-    CONSTRAINT FK_Produto_Categoria FOREIGN KEY (Id_Categoria_Parent) REFERENCES Categoria (Id_Categoria_Parent)
+CREATE TABLE Produto 
+( 
+	Id_Produto			INT				IDENTITY(1,1) PRIMARY KEY	NOT NULL, 
+	Nome_Produto		VARCHAR(25)									NOT NULL, 
+	Preco_Produto		DECIMAL(5,2)	DEFAULT(0.00)				NOT NULL, 
+	Id_Categoria_Parent INT, 
+	Quantidade			INT				DEFAULT(0), 
+	
+	CONSTRAINT FK_Produto_Categoria FOREIGN KEY (Id_Categoria_Parent) REFERENCES Categoria (Id_Categoria)
 )
 
 CREATE TABLE Pedido
