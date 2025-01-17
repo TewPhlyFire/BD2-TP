@@ -32,9 +32,9 @@ CREATE TABLE Caixa
 
 CREATE TABLE Categoria
 (
-    Id_Categoria    INT IDENTITY(1,1)   PRIMARY KEY     NOT NULL,
-    Id_Subcategoria INT,
-    Nome_Categoria  VARCHAR(15)                         NOT NULL,
+    Id_Categoria        INT IDENTITY(1,1)   PRIMARY KEY     NOT NULL,
+    Id_Categoria_Parent INT,
+    Nome_Categoria      VARCHAR(15)                         NOT NULL,
 
     CONSTRAINT ID_SubCat FOREIGN KEY (Id_Categoria) REFERENCES Categoria (Id_Categoria)
 )
