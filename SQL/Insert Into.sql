@@ -1,9 +1,10 @@
-DROP TABLE IF EXISTS Pedido;
-DROP TABLE IF EXISTS Produto;
-DROP TABLE IF EXISTS Categoria;
-DROP TABLE IF EXISTS Caixa;
-DROP TABLE IF EXISTS Funcionario;
-DROP TABLE IF EXISTS Cliente;
+-- Delete
+DELETE FROM Pedido
+DELETE FROM Produto
+DELETE FROM Categoria
+DELETE FROM Caixa
+DELETE FROM Funcionario
+DELETE FROM Cliente
 
 
 --Cliente
@@ -11,7 +12,7 @@ INSERT INTO Cliente (NIF_Cliente, PNome_Cliente, UNome_Cliente, Contacto_Tel, Mo
 VALUES (123456789, 'João', 'Silva', '912345678', 'Rua das Flores, 123', 'joao.silva@email.com', 'senhaSegura123');
 
 INSERT INTO Cliente (NIF_Cliente, PNome_Cliente, UNome_Cliente, Contacto_Tel, Morada, Mail, Password_Client) 
-VALUES (123456789, 'John', 'Doe', '123-456-7890', '123 Main St', 'johndoe@example.com', 'securepassword');
+VALUES (987654321, 'John', 'Doe', '123-456-7890', '123 Main St', 'johndoe@example.com', 'securepassword');
 
 --Funcionario
 INSERT INTO Funcionario (PNome_Funcionario, UNome_Funcionario)
