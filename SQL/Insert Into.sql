@@ -39,13 +39,13 @@ INSERT INTO Caixa(Saldo)
 VALUES(123);
 
 --Produto
-INSERT INTO Produto (Nome_Produto, Preco_Produto, Id_Categoria_Parent, Quantidade)
+INSERT INTO Produto (Nome_Produto, Descricao, Preco_Produto, Id_Categoria_Parent, Quantidade)
 VALUES ('Sony Xperia 5', 489.99, 1, 8);
 
-INSERT INTO Produto (Nome_Produto, Preco_Produto, Id_Categoria_Parent, Quantidade)
-VALUES ('Microsoft Surface Pro 7', 850.00, 2, 2);
+INSERT INTO Produto (Nome_Produto, Descricao, Preco_Produto, Id_Categoria_Parent, Quantidade)
+VALUES ('Microsoft Surface Pro 7 plus', 850.00, 2, 2);
 
-INSERT INTO Produto(Nome_Produto, Preco_Produto, Id_Categoria_Parent, Quantidade)
+INSERT INTO Produto(Nome_Produto, Descricao, Preco_Produto, Id_Categoria_Parent, Quantidade)
 VALUES ('Red Bull 25cl', 1.50, 2, 10);
 
 --Pedido

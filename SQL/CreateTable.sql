@@ -43,6 +43,7 @@ CREATE TABLE Produto
 ( 
 	Id_Produto			INT				IDENTITY(1,1) PRIMARY KEY	NOT NULL, 
 	Nome_Produto		VARCHAR(25)									NOT NULL, 
+    Descricao           VARCHAR(100),
 	Preco_Produto		DECIMAL(5,2)	DEFAULT(0.00)				NOT NULL, 
 	Id_Categoria_Parent INT, 
 	Quantidade			INT				DEFAULT(0), 
