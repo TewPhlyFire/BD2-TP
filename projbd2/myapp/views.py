@@ -1,5 +1,6 @@
 
 from django.shortcuts import render
+from .models import Produto, Categoria
 
 # View para a página 'AboutUs'
 def about_us(request):
@@ -36,10 +37,11 @@ def detalhes_admin(request):
 # View para a página 'Folheto'
 def folheto(request):
     return render(request, 'myapp/Folheto.html')
-
-# View para a página 'HomePageLogin'
+    # View para a página 'HomePageLogin'
 def home_page_login(request):
-    return render(request, 'myapp/HomePageLogin.html')
+    promos = Produto.objects.all()
+    categories = Categoria.objects.all()
+    return render(request, 'myapp/HomePageLogin.html', {'promos': promos, 'categories': categories})
 
 # View para a página 'Login'
 def login(request):

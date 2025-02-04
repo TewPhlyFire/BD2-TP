@@ -16,7 +16,7 @@
                 <a class="customer-support" href="{% url 'folheto' %}">Folheto</a>
             </div>
             <div class="logo">
-                <h1>Mercado Machado</h1>
+                <h1><a href="{% url 'home_page_login' %}">Mercado Machado</a></h1>
             </div>
             <div class="buttonleft">
                 <a class="customer-support">Apoio ao Cliente</a>
@@ -42,20 +42,39 @@
         </div>
     </section>
 
+    {% if promos %}
     <section class="promo-section">
+        {% for promo in promos %}
         <div class="promo-card">
-            <img src="https://via.placeholder.com/150x150" alt="Promo Image">
-            <h3>Promoção -75%</h3>
-            <p>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <img src="{{ promo.image_url }}" alt="Promo Image">
+            <h3>{{ promo.nome_produto }}</h3>
+            <p>{{ promo.preco_produto }}</p>
             <button class="promo-btn">Descrição</button>
         </div>
-        <div class="promo-card">
-            <img src="https://via.placeholder.com/150x150" alt="Promo Image">
-            <h3>Promoção -75%</h3>
-            <p>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <button class="promo-btn">Descrição</button>
-        </div>
-        <!-- Repita os cards conforme necessário -->
+        {% endfor %}
+    </section>
+    {% endif %}
+
+    <section class="categories-section">
+        {% for category in categories %}
+            {% if category.id_subcategoria %}
+                <div class="category">
+                    <h2>{{ category.nome_categoria }}</h2>
+                    <ul class="product-list">
+                        {% for promo in promos %}
+                        {% if promo.id_subcategoria.id_categoria == category.id_categoria %}
+                        <div class="promo-card">
+                            <img src="{{ promo.image_url }}" alt="Promo Image">
+                            <h3>{{ promo.nome_produto }}</h3>
+                            <p>{{ promo.preco_produto }}</p>
+                            <button class="promo-btn">Descrição</button>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        {% endfor %}
     </section>
 </body>
 </html>
