@@ -19,41 +19,41 @@ CREATE TABLE Cliente
 
 CREATE TABLE Funcionario
 (
-    Id_Funcionario          INT IDENTITY(1,1)   PRIMARY KEY     NOT NULL,
+    Id_Funcionario          SERIAL              PRIMARY KEY     NOT NULL,
     PNome_Funcionario       VARCHAR(10)                         NOT NULL,
     UNome_Funcionario       VARCHAR(10)                         NOT NULL,
 )
 
 CREATE TABLE Caixa
 (
-    Id_Caixa    INT IDENTITY(1,1)    PRIMARY KEY,
+    Id_Caixa    SERIAL    PRIMARY KEY,
     Saldo       DECIMAL(10,2)       DEFAULT(0)
 )
 
 CREATE TABLE Categoria 
 ( 
-	Id_Categoria			INT IDENTITY(1,1)	PRIMARY KEY NOT NULL, 
-	Id_Categoria_Parent		INT, 
+	Id_Categoria			SERIAL	PRIMARY KEY NOT NULL, 
+	Id_subcategoria		INT, 
 	Nome_Categoria			VARCHAR(15)						NOT NULL, 
 	
-	CONSTRAINT FK_SubCat FOREIGN KEY (Id_Categoria_Parent) REFERENCES Categoria (Id_Categoria)
+	CONSTRAINT FK_SubCat FOREIGN KEY (Id_subcategoria) REFERENCES Categoria (Id_Categoria)
 )
 
 CREATE TABLE Produto 
 ( 
-	Id_Produto			INT				IDENTITY(1,1) PRIMARY KEY	NOT NULL, 
+	Id_Produto		    SERIAL                          PRIMARY KEY	NOT NULL, 
 	Nome_Produto		VARCHAR(25)									NOT NULL, 
     Descricao           VARCHAR(100),
 	Preco_Produto		DECIMAL(5,2)	DEFAULT(0.00)				NOT NULL, 
-	Id_Categoria_Parent INT, 
+	Id_subcategoria INT, 
 	Quantidade			INT				DEFAULT(0), 
 	
-	CONSTRAINT FK_Produto_Categoria FOREIGN KEY (Id_Categoria_Parent) REFERENCES Categoria (Id_Categoria)
+	CONSTRAINT FK_Produto_Categoria FOREIGN KEY (Id_Categoria) REFERENCES Categoria (Id_Categoria)
 )
 
 CREATE TABLE Pedido
 (
-    Id_Pedido       INT IDENTITY(1,1)   PRIMARY KEY                     NOT NULL,
+    Id_Pedido       SERIAL              PRIMARY KEY                     NOT NULL,
     Id_Produto      INT                                                 NOT NULL,
     Data_Hora       DATETIME            DEFAULT(CURRENT_TIMESTAMP),
     Quantidade      INT                 DEFAULT(1)                      NOT NULL,
