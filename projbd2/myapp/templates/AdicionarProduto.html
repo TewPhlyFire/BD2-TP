@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adicionar Produto - Mercado Machado</title>
-    <link rel="stylesheet" href="{% static 'css/AdminPage.css' %}">
+    <link rel="stylesheet" href="{% static 'css/AdicionarProduto.css' %}">
 </head>
 <body>
     <header class="header">
@@ -47,16 +47,11 @@
             </div>
 
             <div class="form-group">
-                <label for="imagem">Imagem</label>
-                <input type="file" id="imagem" name="imagem" accept="image/*" onchange="previewImage(event)" required>
-                <img id="preview" src="#" alt="Preview da imagem" style="display:none; max-width: 200px; margin-top: 10px;">
-            </div>
-
-            <div class="form-group">
                 <label for="categoria">Categoria</label>
                 <select id="categoria" name="categoria" required>
+                    <option value="" disabled selected>Selecione uma categoria</option>
                     {% for categoria in categorias %}
-                        <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
+                        <option value="{{ categoria.id_categoria }}">{{ categoria.nome_categoria }}</option>
                     {% empty %}
                         <option disabled>Nenhuma categoria disponível</option>
                     {% endfor %}

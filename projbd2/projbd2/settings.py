@@ -80,9 +80,9 @@ WSGI_APPLICATION = 'projbd2.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
+        'NAME': 'gringos',
         'USER': 'postgres',
-        'PASSWORD': '0811',
+        'PASSWORD': 'postgres',
         'HOST': 'localhost',  # ou o endereço do servidor
         'PORT': '5432',       # porta padrão do PostgreSQL
     }
