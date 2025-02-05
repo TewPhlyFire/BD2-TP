@@ -19,8 +19,7 @@
             </div>
             <div class="buttonleft">
                 <a class="customer-support">Apoio ao Cliente</a>
-                <a class="customer-support" href="{% url 'cesto' %}"><img src="{% static 'img/Vector.png' %}" alt="
-                    cesto" style="width: 20px; height: 20px;" ></a>
+                <a class="customer-support" href="{% url 'cesto' %}"><img src="{% static 'img/Vector.png' %}" alt="Cesto" style="width: 20px; height: 20px;"></a>
             </div>
         </div>
         <div class="search-bar">
@@ -28,48 +27,20 @@
         </div>
     </header>
 
+    {% if promos %}
     <section class="promo-section">
+        {% for promo in promos %}
         <div class="promo-card">
-            <img src="https://via.placeholder.com/150x150" alt="Promo Image">
             <div class="promo">
-            <h3>Promoção -75%</h3>
+                <h3>{{ promo.desconto }}%</h3>
             </div>
-            <p>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <p>{{ promo.descricao }}</p>
             <button class="promo-btn">Descrição</button>
         </div>
-        <div class="promo-card">
-            <img src="https://via.placeholder.com/150x150" alt="Promo Image">
-            <div class="promo">
-                <h3>Promoção -75%</h3>
-                </div>
-            <p>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <button class="promo-btn">Descrição</button>
-        </div>
-        <div class="promo-card">
-            <img src="https://via.placeholder.com/150x150" alt="Promo Image">
-            <div class="promo">
-                <h3>Promoção -75%</h3>
-                </div>
-            <p>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <button class="promo-btn">Descrição</button>
-        </div>
-        <div class="promo-card">
-            <img src="https://via.placeholder.com/150x150" alt="Promo Image">
-            <div class="promo">
-                <h3>Promoção -75%</h3>
-                </div>
-            <p>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <button class="promo-btn">Descrição</button>
-        </div>
-        <div class="promo-card">
-            <img src="https://via.placeholder.com/150x150" alt="Promo Image">
-            <div class="promo">
-                <h3>Promoção -75%</h3>
-                </div>
-            <p>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <button class="promo-btn">Descrição</button>
-        </div>
-        <!-- Repita os cards conforme necessário -->
+        {% endfor %}
     </section>
+    {% else %}
+    <p>No promotions available at the moment.</p>
+    {% endif %}
 </body>
 </html>

@@ -68,7 +68,8 @@ class Pedido(models.Model):
 
 class Produto(models.Model):
     id_produto = models.AutoField(primary_key=True)
-    nome_produto = models.CharField(max_length=25)
+    nome_produto = models.CharField(max_length=100)
+    descricao = models.CharField(max_length=100)
     preco_produto = models.DecimalField(max_digits=5, decimal_places=2)
     id_subcategoria = models.ForeignKey(Categoria, models.DO_NOTHING, db_column='id_subcategoria', blank=True, null=True)
     quantidade = models.IntegerField(blank=True, null=True)

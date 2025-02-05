@@ -1,50 +1,80 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Produto - Mercado Machado</title>
     <link rel="stylesheet" href="{% static 'css/DetalhesAdmin.css' %}">
 </head>
 <body>
     <header class="header">
         <div class="container">
+            <div class="buttonright">
+                <a class="customer-support" href="{% url 'about_us' %}">About Us</a>
+                <a class="customer-support" href="{% url 'folheto' %}">Folheto</a>
+            </div>
             <div class="logo">
                 <h1><a href="{% url 'home_page_login' %}">Mercado Machado</a></h1>
             </div>
+            <div class="buttonleft">
+                <a class="customer-support">Apoio ao Cliente</a>
+                <a class="customer-support" href="{% url 'cesto' %}"><img src="{% static 'img/Vector.png' %}" alt="
+                    cesto" style="width: 20px; height: 20px;" ></a>
+            </div>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Pesquisar">
         </div>
     </header>
+
     <main class="content">
-        <form class="edit-product-form">
+        <h2 class="form-title">Editar Produto</h2>
+
+        <!-- Exibição de mensagens de sucesso ou erro -->
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <form class="edit-product-form" method="POST" action="{% url 'detalhes_admin' produto.id_produto %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            
             <div class="form-group">
-                <label for="product-name">Nome</label>
-                <input type="text" id="product-name" name="name" placeholder="Nome do produto" required>
+                <label for="nome">Nome do Produto</label>
+                <input type="text" id="nome" name="nome" placeholder="Ex: Arroz" value="{{ produto.nome }}" required>
             </div>
+
             <div class="form-group">
-                <label for="product-description">Descrição</label>
-                <textarea id="product-description" name="description" rows="4" placeholder="Descrição do produto"></textarea>
+                <label for="descricao">Descrição</label>
+                <textarea id="descricao" name="descricao" placeholder="Ex: Pacote de arroz branco, 5kg" required>{{ product.description }}</textarea>
             </div>
+
             <div class="form-group">
-                <label for="product-quantity">Quantidade em Estoque</label>
-                <input type="number" id="product-quantity" name="quantity" placeholder="0" min="0" required>
+                <label for="quantidade">Quantidade em Stock</label>
+                <input type="number" id="quantidade" name="quantidade" placeholder="Ex: 30" min="0" value="{{ produto.quantidade }}" required>
             </div>
+
             <div class="form-group">
-                <label for="product-price">Preço</label>
-                <input type="number" id="product-price" name="price" placeholder="0.00" min="0" step="0.01" required>
+                <label for="preco">Preço</label>
+                <input type="number" id="preco" name="preco" placeholder="Ex: 2.50" step="0.01" min="0" value="{{ produto.preco_produto }}" required>
             </div>
+
             <div class="form-group">
-                <label for="product-category">Categoria</label>
-                <select id="product-category" name="category">
-                    <option value="alimentos">Alimentos</option>
-                    <option value="bebidas">Bebidas</option>
-                    <option value="limpeza">Produtos de Limpeza</option>
-                    <option value="higiene">Higiene Pessoal</option>
+                <label for="categoria">Categoria</label>
+                <select id="categoria" name="categoria" required>
+                    <option value="" disabled selected>Selecione uma categoria</option>
+                    {% for categoria in categorias %}
+                        <option value="{{ categoria.id_categoria }}">{{ categoria.nome_categoria }}</option>
+                    {% empty %}
+                        <option disabled>Nenhuma categoria disponível</option>
+                    {% endfor %}
                 </select>
             </div>
-            <div class="form-group">
-                <label for="product-image">Imagem</label>
-                <input type="file" id="product-image" name="image" accept="image/*">
-            </div>
+
             <div class="form-buttons">
                 <button type="submit" class="add-button">Salvar</button>
                 <button type="reset" class="remove-button">Cancelar</button>

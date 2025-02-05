@@ -1,15 +1,75 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mercado Machado</title>
+    <title>{{ produto.nome_produto }}</title>
+    {% load static %}
     <link rel="stylesheet" href="{% static 'css/DescobreMais.css' %}">
+
+    <style>
+        .product-details {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f9f9f9;
+        }
+
+        .cenas {
+            background-color: white;
+            padding: 20px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .cenas div {
+            margin: 10px 0;
+        }
+
+        .quantity-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .quantity-controls button {
+            background-color: #ff69b4;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .quantity {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .add-to-cart {
+            background-color: green;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .add-to-cart:hover {
+            background-color: darkgreen;
+        }
+    </style>
 </head>
 
 <body>
- 
     <header class="header">
         <div class="container">
             <div class="buttonright">
@@ -21,74 +81,58 @@
             </div>
             <div class="buttonleft">
                 <a class="customer-support">Apoio ao Cliente</a>
-                <a class="customer-support" href="{% url 'cesto' %}"><img src="{% static 'img/Vector.png' %}" alt="
-                    cesto" style="width: 20px; height: 20px;" ></a>
+                <a class="customer-support" href="{% url 'cesto' %}">
+                    <img src="{% static 'img/Vector.png' %}" alt="Cesto" style="width: 20px; height: 20px;">
+                </a>
             </div>
         </div>
         <div class="search-bar">
             <input type="text" placeholder="Pesquisar">
         </div>
     </header>
-    <style>
-      h1 {
-        text-align: center;
-        color: white; /* Define a cor do texto como branco */
-      }
-  
-      body {
-        background-color: #000000; /* Fundo escuro para contraste */
-      }
-    </style>
-        <div class="promo-card">
-            <img src="https://via.placeholder.com/150x150" alt="Promo Image">
-            <div class="card-content">
-                <div class="title">Batatas</div>
-                <div class="description">Descrição: dasbdkjsahkaskkaaskabs</div>
-                    <div class="juntos">
-                    <button class="cancel-button">Cancel</button>
-                    <div>                   
-                        <button class="decrement">-</button>
-                        <span class="quantity">1</span>
-                        <button class="increment">+</button>
-                    </div>
-                    <div class="compra">
-                        <a class="customer-support" href="#cesto" style="background-color: green;">
-                            <img src="{% static 'img/Vector.png' %}" alt="cesto" style="width: 20px; height: 20px; background-color: green;" >
-                        </button>
-                    </div>  
-                </div>
+
+    <div class="product-details">
+        <div class="cenas">
+            <div class="nome"><h3>{{ produto.nome_produto }}</h3></div>
+            <div class="descricao">Descrição: {{ produto.descricao }}</div>
+            <div class="stock">Stock: {{ produto.quantidade }}</div>
+            <div class="category">Categoria: {{ produto.id_subcategoria.nome_categoria }}</div>
+            <div class="preco">Preço: {{ produto.preco_produto }}$</div>
+
+            <div class="quantity-controls">
+                <button class="decrement">-</button>
+                <span class="quantity">1</span>
+                <button class="increment">+</button>
             </div>
+
+            <button class="add-to-cart">Adicionar ao Carrinho</button>
         </div>
+    </div>
 
     <script>
-        // Seleciona todos os botões de incremento e decremento
-        const decrementButtons = document.querySelectorAll('.decrement');
-        const incrementButtons = document.querySelectorAll('.increment');
+        const decrementButton = document.querySelector('.decrement');
+        const incrementButton = document.querySelector('.increment');
+        const quantityDisplay = document.querySelector('.quantity');
+        const addToCartButton = document.querySelector('.add-to-cart');
 
-        // Adiciona evento a todos os botões de decremento
-        decrementButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const card = button.closest('.promo-card'); // Seleciona o card onde o botão foi clicado
-                const quantityDisplay = card.querySelector('.quantity'); // Encontra o contador dentro do card
-                let quantity = parseInt(quantityDisplay.textContent); // Converte o valor para número
-                
-                if (quantity > 1) {
-                    quantity--;
-                    quantityDisplay.textContent = quantity; // Atualiza o valor
-                }
-            });
+        decrementButton.addEventListener('click', () => {
+            let quantity = parseInt(quantityDisplay.textContent);
+            if (quantity > 1) {
+                quantity--;
+                quantityDisplay.textContent = quantity;
+            }
         });
 
-        // Adiciona evento a todos os botões de incremento
-        incrementButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const card = button.closest('.promo-card'); // Seleciona o card onde o botão foi clicado
-                const quantityDisplay = card.querySelector('.quantity'); // Encontra o contador dentro do card
-                let quantity = parseInt(quantityDisplay.textContent); // Converte o valor para número
-                
-                quantity++;
-                quantityDisplay.textContent = quantity; // Atualiza o valor
-            });
+        incrementButton.addEventListener('click', () => {
+            let quantity = parseInt(quantityDisplay.textContent);
+            quantity++;
+            quantityDisplay.textContent = quantity;
+        });
+
+        addToCartButton.addEventListener('click', () => {
+            const quantity = quantityDisplay.textContent;
+            alert(`Adicionado ${quantity} unidade(s) ao carrinho!`);
+            // Aqui você pode adicionar lógica para enviar a quantidade ao backend usando AJAX, por exemplo.
         });
     </script>
 </body>

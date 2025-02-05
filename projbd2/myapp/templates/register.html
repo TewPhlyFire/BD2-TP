@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar</title>
+
+    <link rel="stylesheet" href="{% static 'css/Registar.css' %}">
+</head>
+<body>
+    <div class="register">
+        <!-- Avatar -->
+        <div class="register-child">
+            <img src="{% static 'img/Rectangle 312 .png' %}" alt="User Avatar">
+        </div>
+
+        <!-- Formulário de Registro -->
+        <form action="{% url 'registar' %}" method="POST">
+            {% csrf_token %}
+            
+            <!-- Campos de entrada -->
+            <div class="input-field">
+                {{ form.username }}
+            </div>
+            <div class="input-field">
+                {{ form.email }}
+            </div>
+            <div class="input-field">
+                {{ form.password }}
+            </div>
+            <div class="input-field">
+                {{ form.confirm_password }}
+            </div>
+            <div class="input-field">
+                {{ form.morada }}
+            </div>
+            <div class="input-field">
+                {{ form.contacto }}
+            </div>
+
+            <!-- Botão de registro -->
+            <button type="submit" class="register-button">Registar</button>
+        </form>
+
+        <!-- Botão de login -->
+        <button class="login-button" onclick="window.location.href='{% url 'login' %}'">Login</button>
+    </div>
+</body>
+</html>

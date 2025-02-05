@@ -10,8 +10,17 @@
 <body>
     <header class="header">
         <div class="container">
+            <div class="buttonright">
+                <a class="customer-support" href="{% url 'about_us' %}">About Us</a>
+                <a class="customer-support" href="{% url 'folheto' %}">Folheto</a>
+            </div>
             <div class="logo">
                 <h1><a href="{% url 'home_page_login' %}">Mercado Machado</a></h1>
+            </div>
+            <div class="buttonleft">
+                <a class="customer-support">Apoio ao Cliente</a>
+                <a class="customer-support" href="{% url 'cesto' %}"><img src="{% static 'img/Vector.png' %}" alt="
+                    cesto" style="width: 20px; height: 20px;" ></a>
             </div>
         </div>
         <div class="search-bar">
@@ -20,7 +29,9 @@
     </header>
     <main class="content">
         <div class="button-container">
-            <button class="add-button">Adicionar Produto</button>
+            <a href="{% url 'adicionar_produto' %}">
+                <button class="add-button">Adicionar Produto</button>
+            </a>
         </div>
         <h2 class="table-title">Lista de Produtos</h2>
         <table class="product-table">
@@ -31,49 +42,41 @@
                     <th>Quantidade em Stock</th>
                     <th>Preço</th>
                     <th>Categoria</th>
-                    <th>Imagem</th>
                     <th>Ações</th>
                 </tr>
             </thead>
             <tbody>
+                {% for produto in produtos %}
                 <tr>
-                    <td>Arroz</td>
-                    <td>Pacote de arroz branco, 5kg</td>
-                    <td>30</td>
-                    <td>2.50</td>
-                    <td>Alimentos</td>
-                    <td><img src="/site/img/Gringo.jpg" alt="Arroz"></td>
+                    <td>{{ produto.nome_produto }}</td>
+                    <td>{{ produto.descricao }}</td>
+                    <td>{{ produto.quantidade }}</td>
+                    <td>{{ produto.preco_produto }}</td>
+                    <td>{{ produto.id_subcategoria.nome_categoria }}</td>  <!-- Supondo que 'id_subcategoria' é uma relação com a categoria -->
                     <td>            
-                        <button class="details-button">Detalhes</button>
-                        <button class="remove-button">Remover</button>
+                        <a href="{% url 'detalhes_admin' produto.id_produto %}">
+                            <button class="details-button">Detalhes</button>
+                        </a>
+                        <a href="{% url 'remover_produto' produto_id=produto.id_produto %}" class="remove-button">Remover</a>
                     </td>
                 </tr>
+                {% empty %}
                 <tr>
-                    <td>Feijão</td>
-                    <td>Pacote de feijão preto, 1kg</td>
-                    <td>50</td>
-                    <td>3.00</td>
-                    <td>Alimentos</td>
-                    <td><img src="/site/img/Lenin.jpg" alt="Feijão"></td>
-                    <td>           
-                        <button class="details-button">Detalhes</button>
-                        <button class="remove-button">Remover</button>
-                    </td>
+                    <td colspan="6">Nenhum produto encontrado.</td>
                 </tr>
-                <tr>
-                    <td>Azeite</td>
-                    <td>Garrafa de azeite extra virgem, 500ml</td>
-                    <td>20</td>
-                    <td>5.00</td>
-                    <td>Alimentos</td>
-                    <td><img src="/site/img/Klank.jpg" alt="Azeite"></td>
-                    <td>            
-                        <button class="details-button">Detalhes</button>
-                        <button class="remove-button">Remover</button>
-                    </td>
-                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </main>
+
+    <script>
+        // Função para lidar com a remoção do produto
+        function removeProduto(produtoId) {
+            if (confirm('Tem certeza que deseja remover este produto?')) {
+                // Aqui você pode fazer a chamada para o backend para remover o produto (via AJAX, por exemplo)
+                window.location.href = '/remover-produto/' + produtoId + '/';
+            }
+        }
+    </script>
 </body>
 </html>
