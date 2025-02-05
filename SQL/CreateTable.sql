@@ -24,11 +24,7 @@ CREATE TABLE Funcionario
     UNome_Funcionario       VARCHAR(10)                         NOT NULL
 )
 
-CREATE TABLE Caixa
-(
-    Id_Caixa    SERIAL    PRIMARY KEY,
-    Saldo       DECIMAL(10,2)       DEFAULT(0)
-)
+
 
 CREATE TABLE Categoria 
 ( 

@@ -1,6 +1,6 @@
 
 from django.shortcuts import render, redirect
-from .models import Produto, Categoria
+from .models import Produto, Categoria, Cliente
 from django.db import connection
 from .forms import RegistroForm
 
@@ -88,29 +88,27 @@ def home_page_login(request):
 
 # View para a página 'Login'
 def login(request):
-    return render(request, 'Login.html')
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        
+        if user is not None:
+            login(request, user)
+            return redirect('HomePageLogin')  # Redirecionamento após login bem-sucedido
+        else:
+            messages.error(request, 'Credenciais inválidas. Tente novamente.')
+
+    return render(request, 'login.html')
 
 def registar(request):
     if request.method == "POST":
         form = RegistroForm(request.POST)
         if form.is_valid():
-            # Aqui você pode adicionar a lógica para salvar o novo usuário no banco de dados
-            # por exemplo, criando um usuário no modelo User ou algo customizado.
-            email = form.cleaned_data['email']
-            password = form.cleaned_data['password']
-            confirm_password = form.cleaned_data['confirm_password']
-            morada = form.cleaned_data['morada']
-            contacto = form.cleaned_data['contacto']
-
-            # Verificar se as senhas coincidem
-            if password == confirm_password:
-                # Salvar os dados no banco ou realizar ações adicionais
-                # redirecionar para a página de login ou para outra página
-                return redirect('login')  # Alterar conforme necessário
-            else:
-                # Se as senhas não coincidirem, adicionar uma mensagem de erro
-                form.add_error('confirm_password', 'As senhas não coincidem.')
+            form.save()
+            return redirect('login')
     else:
+        print("Formulário inválido")
         form = RegistroForm()
 
     return render(request, 'register.html', {'form': form})
