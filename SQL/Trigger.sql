@@ -29,3 +29,40 @@ BEGIN
         THROW 50000, 'Operação abortada', 1;
     END
 END;
+/*
+se nao funcionar usar este
+CREATE OR REPLACE FUNCTION AtualizaCaixaEProduto()
+RETURNS TRIGGER AS
+$$
+BEGIN
+    -- Atualizar o saldo da caixa com base no total do pedido
+    UPDATE Caixa
+    SET Saldo = Saldo + NEW.Total
+    WHERE Id_Caixa = NEW.Id_Caixa;
+
+    -- Atualizar a quantidade do produto com base na quantidade do pedido
+    UPDATE Produto
+    SET Quantidade = Quantidade - NEW.Quantidade
+    WHERE Id_Produto = NEW.Id_Produto;
+
+    -- Verificar se a quantidade do produto ficou negativa
+    IF EXISTS (
+        SELECT 1
+        FROM Produto
+        WHERE Id_Produto = NEW.Id_Produto AND Quantidade < 0
+    ) THEN
+        -- Se a quantidade ficou negativa, desfaz a transação
+        RAISE EXCEPTION 'Operação abortada: Quantidade de produto não pode ser negativa';
+    END IF;
+
+    RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+-- Criando o trigger para a tabela Pedido
+CREATE TRIGGER AtualizaCaixaEProduto
+AFTER INSERT ON Pedido
+FOR EACH ROW
+EXECUTE FUNCTION AtualizaCaixaEProduto();
+*/

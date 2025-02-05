@@ -62,7 +62,7 @@
                     <h2>{{ category.nome_categoria }}</h2>
                     <ul class="product-list">
                         {% for promo in promos %}
-                        {% if promo.id_subcategoria.id_categoria == category.id_categoria %}
+                        {% if promo.id_subcategoria.id_subcategoria == category.id_subcategoria %}
                         <div class="promo-card">
                             <img src="{{ promo.image_url }}" alt="Promo Image">
                             <h3>{{ promo.nome_produto }}</h3>
