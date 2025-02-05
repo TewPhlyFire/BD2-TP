@@ -1,0 +1,16 @@
+{
+    "type": "object",
+    "properties": {
+      "Imagens": {
+        "type": "string",
+        "format": "byte",
+        "description": "Binary image data"
+      },
+      "ID_Prodref": {
+        "type": "integer",
+        "description": "Product reference ID"
+      }
+    },
+    "required": ["Imagens", "ID_Prodref"]
+  }
+  
