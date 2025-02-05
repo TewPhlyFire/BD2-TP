@@ -14,19 +14,17 @@
         <div class="container">
             <div class="buttonright">
                 <a class="customer-support" href="{% url 'about_us' %}">About Us</a>
-                <a class="customer-support" href="{% url 'folheto' %}">Folheto</a>
+                
             </div>
             <div class="logo">
                 <h1><a href="{% url 'home_page_login' %}">Mercado Machado</a></h1>
             </div>
             <div class="buttonleft">
-                <a class="customer-support">Apoio ao Cliente</a>
-                <a class="customer-support" href="{% url 'cesto' %}"><img src="{% static 'img/Vector.png' %}" alt="
-                    cesto" style="width: 20px; height: 20px;" ></a>
+                <a class="customer-support" href="{% url 'folheto' %}">Folheto</a>
+                <a class="customer-support" href="{% url 'cesto' %}">
+                    <img src="{% static 'img/Vector.png' %}" alt="Cesto" style="width: 20px; height: 20px;">
+                </a>
             </div>
-        </div>
-        <div class="search-bar">
-            <input type="text" placeholder="Pesquisar">
         </div>
     </header>
     <title>Formulário de Entrega</title>
