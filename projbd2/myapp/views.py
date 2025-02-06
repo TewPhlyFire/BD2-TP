@@ -91,17 +91,15 @@ def login(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-        
-        # Corrigir o nome da variável para 'cliente' em minúsculas
-        cliente = Cliente.objects.filter(mail=username, password_client=password).first()
-        
-        if cliente is not None:
-            # Supondo que você esteja usando o Django auth para login
-            # Importando o login do Django para autenticação
-            from django.contrib.auth import login as auth_login
-            auth_login(request, cliente)
-            return redirect('HomePageLogin')  # Redirecionamento após login bem-sucedido
-    
+        with connection.cursor() as cursor:
+            cursor.execute("select * from cliente where mail = %s and password_client = %s", [username, password])
+            cliente = cursor.fetchone()
+            if cliente is not None:
+                request.session['cliente'] = cliente
+                return redirect('home_page_login')
+    if 'cliente' in request.session:
+        return redirect('home_page_login')
+
     return render(request, 'login.html')
 
 def registar(request):
