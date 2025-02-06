@@ -80,6 +80,7 @@ def detalhes_admin(request, produto_id):
 def folheto(request):
     promos = Produto.objects.all()
     return render(request, 'Folheto.html', {'promos': promos})
+
     # View para a página 'HomePageLogin'
 def home_page_login(request):
     promos = Produto.objects.all()
