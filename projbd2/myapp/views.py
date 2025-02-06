@@ -86,6 +86,47 @@ def home_page_login(request):
     categories = Categoria.objects.all()
     return render(request, 'HomePageLogin.html', {'promos': promos, 'categories': categories})
 
+# View para a página 'UserPage'
+def UserPage(request, nif_cliente):
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT pnome_cliente, unome_cliente, morada, mail, contacto_tel FROM cliente WHERE nif_cliente = %s", [nif_cliente])
+        row = cursor.fetchone()
+
+    if row:
+        cliente = {
+            'nif_cliente': nif_cliente,
+            'pnome_cliente': row[0],
+            'unome_cliente': row[1],
+            'morada': row[2],
+            'mail': row[3],
+            'contacto_tel': row[4],
+        }
+    else:
+        cliente = None  # Se não encontrar o cliente, evita erro
+
+    return render(request, 'UserPage.html', {'cliente': cliente})
+
+
+# Editar perfil
+def editar_perfil(request, nif_cliente):
+    if request.method == "POST":
+        pnome_cliente = request.POST.get("pnome_cliente")
+        unome_cliente = request.POST.get("unome_cliente")
+        morada = request.POST.get("morada")
+        mail = request.POST.get("mail")
+        contacto_tel = request.POST.get("contacto_tel")
+
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                UPDATE cliente 
+                SET pnome_cliente = %s, unome_cliente = %s, morada = %s, mail = %s, contacto_tel = %s 
+                WHERE nif_cliente = %s
+            """, [pnome_cliente, unome_cliente, morada, mail, contacto_tel, nif_cliente])
+
+        return redirect('UserPage', nif_cliente=nif_cliente)
+
+    return redirect('UserPage', nif_cliente=nif_cliente)
+
 # View para a página 'Login'
 def login(request):
     if request.method == 'POST':
@@ -101,6 +142,11 @@ def login(request):
         return redirect('home_page_login')
 
     return render(request, 'login.html')
+
+def log_out(request):
+    if 'cliente' in request.session:
+        del request.session['cliente']
+    return redirect('login')
 
 def registar(request):
     if request.method == "POST":

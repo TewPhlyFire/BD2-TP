@@ -11,8 +11,11 @@
     <header class="header">
         <div class="container">
             <div class="buttonright">
+                <a class="customer-support" href="{% url 'log_out' %}">log out</a>
+                <a class="customer-support" href="{% url 'UserPage' cliente.nif_cliente %}">
+                    <button type="button" id="profile-button">Ir para o Perfil</button>
+                </a>
                 <a class="customer-support" href="{% url 'about_us' %}">About Us</a>
-                
             </div>
             <div class="logo">
                 <h1><a href="{% url 'home_page_login' %}">Mercado Machado</a></h1>

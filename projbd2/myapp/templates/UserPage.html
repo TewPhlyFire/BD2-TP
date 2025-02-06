@@ -1,0 +1,206 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Perfil - Mercado Machado</title>
+    <link rel="stylesheet" href="{% static 'css/PagarCenas.css' %}">
+    <style>
+        .content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            text-align: center;
+        }
+
+        .profile-info {
+            width: 80%;
+            max-width: 500px;
+            margin-top: 20px;
+        }
+
+        .form-group {
+            margin: 10px 0;
+        }
+
+        .form-group input {
+            width: 100%;
+        }
+
+        .form-group label {
+            display: block;
+            text-align: left;
+            margin-bottom: 5px;
+        }
+
+        .form-group .profile-text {
+            padding: 5px;
+            background-color: #f0f0f0;
+        }
+
+        .form-title {
+            margin-bottom: 20px;
+        }
+
+        button {
+            margin-top: 10px;
+        }
+
+        #edit-button {
+            background-color: #28a745; /* Cor verde */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        #edit-button:hover {
+            background-color: #218838; /* Cor verde mais escura ao passar o mouse */
+        }
+
+        .edit-profile-form {
+            display: none; /* Inicialmente escondemos o formulário */
+            width: 80%;
+            max-width: 500px;
+            margin-top: 20px;
+        }
+
+        .form-group input {
+            background-color: white;
+        }
+
+        /* Estilos para o botão de Cancelar */
+        #cancel-button {
+            background-color: #dc3545; /* Cor vermelha */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        #cancel-button:hover {
+            background-color: #c82333; /* Cor vermelha mais escura ao passar o mouse */
+        }
+
+        /* Estilo para o botão Salvar */
+        #save-button {
+            background-color: #28a745; /* Cor verde */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        #save-button:hover {
+            background-color: #218838; /* Cor verde mais escura ao passar o mouse */
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="buttonright">
+                <a class="customer-support" href="{% url 'log_out' %}">Log Out</a>
+                <a class="customer-support" href="{% url 'about_us' %}">About Us</a>
+            </div>
+            <div class="logo">
+                <h1><a href="{% url 'home_page_login' %}">Mercado Machado</a></h1>
+            </div>
+            <div class="buttonleft">
+                <a class="customer-support" href="{% url 'folheto' %}">Folheto</a>
+                <a class="customer-support" href="{% url 'cesto' %}"><img src="{% static 'img/Vector.png' %}" alt="Cesto" style="width: 20px; height: 20px;"></a>
+            </div>
+        </div>
+    </header>
+
+    <main class="content">
+        <h2 class="form-title">Perfil</h2>
+
+        <div class="profile-info">
+            <div class="form-group">
+                <label for="pnome_cliente">Primeiro Nome</label>
+                <div class="profile-text">{{ cliente.pnome_cliente }}</div>
+            </div>
+
+            <div class="form-group">
+                <label for="unome_cliente">Último Nome</label>
+                <div class="profile-text">{{ cliente.unome_cliente }}</div>
+            </div>
+
+            <div class="form-group">
+                <label for="morada">Morada</label>
+                <div class="profile-text">{{ cliente.morada }}</div>
+            </div>
+
+            <div class="form-group">
+                <label for="mail">E-mail</label>
+                <div class="profile-text">{{ cliente.mail }}</div>
+            </div>
+
+            <div class="form-group">
+                <label for="contacto_tel">Contato</label>
+                <div class="profile-text">{{ cliente.contacto_tel }}</div>
+            </div>
+
+            <!-- Botão Editar ao lado -->
+            <button type="button" id="edit-button">Editar</button>
+        </div>
+
+        <!-- Formulário de edição escondido inicialmente -->
+        <div class="edit-profile-form" id="edit-form">
+            <form method="POST" action="{% url 'editar_perfil' cliente.nif_cliente %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="pnome_cliente">Primeiro Nome</label>
+                    <input type="text" id="pnome_cliente" name="pnome_cliente" value="{{ cliente.pnome_cliente }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="unome_cliente">Último Nome</label>
+                    <input type="text" id="unome_cliente" name="unome_cliente" value="{{ cliente.unome_cliente }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="morada">Morada</label>
+                    <input type="text" id="morada" name="morada" value="{{ cliente.morada }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="mail">E-mail</label>
+                    <input type="email" id="mail" name="mail" value="{{ cliente.mail }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="contacto_tel">Contato</label>
+                    <input type="text" id="contacto_tel" name="contacto_tel" value="{{ cliente.contacto_tel }}" required>
+                </div>
+
+                <!-- Botões de Salvar e Cancelar -->
+                <button type="submit" id="save-button">Salvar Alterações</button>
+                <button type="button" id="cancel-button" onclick="window.location.href='{{ request.path }}';">Cancelar</button>
+            </form>
+        </div>
+
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </main>
+
+    <script>
+        document.getElementById('edit-button').addEventListener('click', function() {
+            document.querySelector('.profile-info').style.display = 'none';  // Esconde as informações do perfil
+            document.getElementById('edit-form').style.display = 'block';   // Exibe o formulário de edição
+        });
+    </script>
+</body>
+</html>
