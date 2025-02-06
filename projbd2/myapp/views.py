@@ -148,6 +148,21 @@ def log_out(request):
     if 'cliente' in request.session:
         del request.session['cliente']
     return redirect('login')
+#login funcionarios
+def login_admin(request):
+    if request.method == 'POST':
+        pnome_funcionario = request.POST.get('pnome_funcionario')
+        senha_funcionario = request.POST.get('senha_funcionario')
+
+        with connection.cursor() as cursor:
+            cursor.execute("select * from funcionario where pnome_funcionario = %s and senha_funcionario = %s", [pnome_funcionario, senha_funcionario])
+            funcionario = cursor.fetchone()
+            if funcionario is not None:
+                request.session['funcionario'] = funcionario
+                return redirect('admin_page')
+
+    return render(request, 'login_admin.html')
+
 
 def registar(request):
     if request.method == "POST":

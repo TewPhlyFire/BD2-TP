@@ -1,91 +1,47 @@
--- Delete
-DELETE FROM Pedido;
-DELETE FROM Produto;
-DELETE FROM Categoria;
-DELETE FROM Caixa;
-DELETE FROM Funcionario;
-DELETE FROM Cliente;
-
--- Cliente
+-- Inserir na tabela Cliente
 INSERT INTO Cliente (NIF_Cliente, PNome_Cliente, UNome_Cliente, Contacto_Tel, Morada, Mail, Password_Client)
-VALUES (123456789, 'João', 'Silva', '912345678', 'Rua das Flores, 123', 'joao.silva@email.com', 'senhaSegura123');
+VALUES
+(123456789, 'João', 'Silva', '912345678', 'Rua A, 123', 'joao.silva@email.com', 'senha123'),
+(987654321, 'Maria', 'Santos', '913456789', 'Rua B, 456', 'maria.santos@email.com', 'senha456'),
+(112233445, 'Carlos', 'Pereira', '914567890', 'Rua C, 789', 'carlos.pereira@email.com', 'senha789'),
+(998877665, 'Ana', 'Costa', '915678901', 'Rua D, 101', 'ana.costa@email.com', 'senha101');
 
-INSERT INTO Cliente (NIF_Cliente, PNome_Cliente, UNome_Cliente, Contacto_Tel, Morada, Mail, Password_Client) 
-VALUES (987654321, 'John', 'Doe', '123-456-7890', '123 Main St', 'johndoe@example.com', 'securepassword');
+-- Inserir na tabela Funcionario
+INSERT INTO Funcionario (PNome_Funcionario, UNome_Funcionario, Senha_Funcionario)
+VALUES
+('Paulo', 'Ferreira', 'senhaPaulo123'),
+('Laura', 'Oliveira', 'senhaLaura456'),
+('José', 'Mendes', 'senhaJose789'),
+('Raquel', 'Martins', 'senhaRaquel101');
 
-INSERT INTO Cliente (NIF_Cliente, PNome_Cliente, UNome_Cliente, Contacto_Tel, Morada, Mail, Password_Client)
-VALUES (456789123, 'Ana', 'Pereira', '915678432', 'Av. Central, 45', 'ana.pereira@mail.com', 'anaPassword456');
-
-INSERT INTO Cliente (NIF_Cliente, PNome_Cliente, UNome_Cliente, Contacto_Tel, Morada, Mail, Password_Client)
-VALUES (789123456, 'Carlos', 'Martins', '916543210', 'Rua do Sol, 88', 'carlos.martins@mail.com', 'carlos123');
-
--- Funcionario
-INSERT INTO Funcionario (PNome_Funcionario, UNome_Funcionario)
-VALUES ('Maria', 'Santos');
-
-INSERT INTO Funcionario (PNome_Funcionario, UNome_Funcionario)
-VALUES ('Orlando', 'Jesus');
-
-INSERT INTO Funcionario (PNome_Funcionario, UNome_Funcionario)
-VALUES ('Pedro', 'Oliveira');
-
-INSERT INTO Funcionario (PNome_Funcionario, UNome_Funcionario)
-VALUES ('Inês', 'Gomes');
-
--- Categoria e Subcategoria
+-- Inserir na tabela Categoria
 INSERT INTO Categoria (Id_subcategoria, Nome_Categoria)
-VALUES (NULL, 'Eletrônicos');
+VALUES
+(NULL, 'Eletrônicos'),
+(1, 'Móveis'),
+(2, 'Alimentos'),
+(3, 'Vestuário');
 
-INSERT INTO Categoria (Id_subcategoria, Nome_Categoria)
-VALUES (1, 'Telemoveis');
+-- Inserir na tabela Produto
+INSERT INTO Produto (Nome_Produto, Descricao, Preco_Produto, Id_subcategoria, Quantidade)
+VALUES
+('Smartphone', 'Celular com tela de 6.5"', 500.00, 1, 10),
+('Sofá', 'Sofá de 3 lugares', 300.00, 2, 5),
+('Arroz', 'Pacote de arroz 5kg', 10.00, 3, 50),
+('Camiseta', 'Camiseta de algodão', 25.00, 4, 20);
 
-INSERT INTO Categoria (Id_subcategoria, Nome_Categoria)
-VALUES (1, 'Computadores');
+-- Inserir na tabela Promo
+INSERT INTO Promo (Id_Produto, Data_Inicio, Data_Fim, Desconto)
+VALUES
+(1, '2025-02-01', '2025-02-28', 10.00),
+(2, '2025-02-01', '2025-02-28', 15.00),
+(3, '2025-02-01', '2025-02-28', 5.00),
+(4, '2025-02-01', '2025-02-28', 20.00);
 
-INSERT INTO Categoria (Id_subcategoria, Nome_Categoria)
-VALUES (NULL, 'Bebidas');
-
-INSERT INTO Categoria (Id_subcategoria, Nome_Categoria)
-VALUES (2, 'Energéticas');
-
--- Caixa
-INSERT INTO Caixa (Saldo)
-VALUES (123);
-
-INSERT INTO Caixa (Saldo)
-VALUES (500.75);
-
-INSERT INTO Caixa (Saldo)
-VALUES (1000.50);
-
-INSERT INTO Caixa (Saldo)
-VALUES (250.00);
-
-
-
--- Produto
-INSERT INTO Produto (Nome_Produto, Descricao, Preco_Produto, id_subcategoria, Quantidade)
-VALUES ('Sony Xperia 5', 'Smartphone com 128GB e 6GB RAM', 489.99, 2, 8);
-
-INSERT INTO Produto (Nome_Produto, Descricao, Preco_Produto, id_subcategoria, Quantidade)
-VALUES ('Microsoft Surface Pro 7 Plus', 'Tablet com teclado destacável e 256GB SSD', 850.00, 3, 2);
-
-INSERT INTO Produto (Nome_Produto, Descricao, Preco_Produto, id_subcategoria, Quantidade)
-VALUES ('Red Bull 25cl', 'Bebida energética', 1.50, 5, 10);
-
-INSERT INTO Produto (Nome_Produto, Descricao, Preco_Produto, id_subcategoria, Quantidade)
-VALUES ('iPhone 13', '128GB, Cor Azul', 999.99, 2, 5);
-
-
--- Pedido
-INSERT INTO Pedido (Id_Produto, Data_Hora, Quantidade, Total, NIF_Cliente, Id_Funcionario, Id_Caixa)
-VALUES (5, CURRENT_TIMESTAMP, 2, 979.98, 123456789, 1, 1);
-
-INSERT INTO Pedido (Id_Produto, Data_Hora, Quantidade, Total, NIF_Cliente, Id_Funcionario, Id_Caixa)
-VALUES (6, CURRENT_TIMESTAMP, 1, 850.00, 987654321, 2, 2);
-
-INSERT INTO Pedido (Id_Produto, Data_Hora, Quantidade, Total, NIF_Cliente, Id_Funcionario, Id_Caixa)
-VALUES (7, CURRENT_TIMESTAMP, 6, 9.00, 456789123, 3, 3);
-
-INSERT INTO Pedido (Id_Produto, Data_Hora, Quantidade, Total, NIF_Cliente, Id_Funcionario, Id_Caixa)
-VALUES (4, CURRENT_TIMESTAMP, 1, 999.99, 789123456, 1, 4);
+-- Inserir na tabela Pedido
+INSERT INTO Pedido (Id_Produto, Quantidade, NIF_Cliente, Id_Funcionario)
+VALUES
+(1, 2, 123456789, 1),
+(2, 1, 987654321, 2),
+(3, 5, 112233445, 3),
+(4, 3, 998877665, 4);

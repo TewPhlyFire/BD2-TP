@@ -43,13 +43,12 @@ class Cliente(models.Model):
 
 class Funcionario(models.Model):
     id_funcionario = models.AutoField(primary_key=True)
-    pnome_funcionario = models.CharField(max_length=10)
-    unome_funcionario = models.CharField(max_length=10)
+    pnome_funcionario = models.CharField(max_length=255)
+    unome_funcionario = models.CharField(max_length=255)
+    senha_funcionario = models.CharField(max_length=255)
 
-    class Meta:
-        managed = False
-        db_table = 'funcionario'
-
+    def __str__(self):
+        return self.pnome_funcionario
 
 class Pedido(models.Model):
     id_pedido = models.AutoField(primary_key=True)

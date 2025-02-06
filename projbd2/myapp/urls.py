@@ -18,6 +18,7 @@ urlpatterns = [
     path('log_out/', views.log_out, name='log_out'),
     path('UserPage/<int:nif_cliente>/', views.UserPage, name='UserPage'),
     path('editar_perfil/<int:nif_cliente>/', views.editar_perfil, name='editar_perfil'),
+    path('login_admin/', views.login_admin, name='login_admin'),
 
 ]
 

@@ -15,24 +15,19 @@
         </div>
 
         <!-- Formulário de Login -->
-        <form action="{% url 'login' %}" method="POST">
+        <form action="{% url 'login_admin' %}" method="POST">
             {% csrf_token %}
             <!-- Inputs -->
             <div class="input1">
-                <input type="text" name="username" placeholder="Username/Email" required>
+                <input type="text" name="pnome_funcionario" placeholder="Primeiro Nome" required>
             </div>
             <div class="input">
-                <input type="password" name="password" placeholder="Password" required>
+                <input type="password" name="senha_funcionario" placeholder="Senha" required>
             </div>
 
             <!-- Botões -->
             <button type="submit" class="button">Log in</button>
-            <button class="button" onclick="window.location.href='{% url 'registar' %}'">Registar</button>
-            <button class="button" onclick="window.location.href='{% url 'login_admin' %}'">Log in as Admin</button>
         </form>
-
-        <!-- Botão de Registro -->
-
     </div>
 </body>
 </html>
