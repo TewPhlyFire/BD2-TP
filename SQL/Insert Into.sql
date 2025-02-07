@@ -23,12 +23,12 @@ VALUES
 (3, 'Vestuário');
 
 -- Inserir na tabela Produto
-INSERT INTO Produto (Nome_Produto, Descricao, Preco_Produto, Id_subcategoria, Quantidade)
+INSERT INTO Produto (Nome_Produto, Descricao, Preco_original, Preco_Produto, Id_subcategoria, Quantidade)
 VALUES
-('Smartphone', 'Celular com tela de 6.5"', 500.00, 1, 10),
-('Sofá', 'Sofá de 3 lugares', 300.00, 2, 5),
-('Arroz', 'Pacote de arroz 5kg', 10.00, 3, 50),
-('Camiseta', 'Camiseta de algodão', 25.00, 4, 20);
+('Smartphone', 'Celular com tela de 6.5"', 500.00, 500.00, 1, 10),
+('Sofá', 'Sofá de 3 lugares', 300.00, 300.00, 2, 5),
+('Arroz', 'Pacote de arroz 5kg', 10.00, 10.00, 3, 50),
+('Camiseta', 'Camiseta de algodão', 25.00, 25.00, 4, 20);
 
 -- Inserir na tabela Promo
 INSERT INTO Promo (Id_Produto, Data_Inicio, Data_Fim, Desconto)
