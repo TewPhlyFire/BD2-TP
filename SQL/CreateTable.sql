@@ -35,12 +35,13 @@ CREATE TABLE Categoria
 
 CREATE TABLE Produto 
 ( 
-    Id_Produto              SERIAL                          PRIMARY KEY     NOT NULL, 
-    Nome_Produto            VARCHAR(100)                     NOT NULL, 
+    Id_Produto              SERIAL              PRIMARY KEY      NOT NULL, 
+    Nome_Produto            VARCHAR(100)                         NOT NULL, 
     Descricao               VARCHAR(100),
-    Preco_Produto           DECIMAL(5,2) DEFAULT 0.00        NOT NULL, 
+    Preco_original          DECIMAL(5,2)     DEFAULT 0.00        NOT NULL,
+    Preco_Produto           DECIMAL(5,2)     DEFAULT 0.00        NOT NULL, 
     Id_subcategoria         INT, 
-    Quantidade             INT             DEFAULT 0, 
+    Quantidade              INT              DEFAULT 0, 
     
     CONSTRAINT FK_Produto_Categoria FOREIGN KEY (Id_subcategoria) REFERENCES Categoria (Id_Categoria)
 );
