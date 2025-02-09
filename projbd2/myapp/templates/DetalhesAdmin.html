@@ -13,7 +13,6 @@
             <div class="buttonright">
                 <a class="customer-support" href="{% url 'log_out' %}">log out</a>
                 <a class="customer-support" href="{% url 'about_us' %}">About Us</a>
-                
             </div>
             <div class="logo">
                 <h1><a href="{% url 'home_page_login' %}">Mercado Machado</a></h1>
@@ -39,39 +38,57 @@
             </ul>
         {% endif %}
 
+        <!-- Exibição da Imagem do Produto -->
+        {% if imagem %}
+            <div class="product-image">
+                <img src="data:image/png;base64,{{ imagem }}" alt="Imagem do Produto" style="max-width: 300px;">
+            </div>
+        {% else %}
+            <p>Sem imagem disponível.</p>
+        {% endif %}
+
         <form class="edit-product-form" method="POST" action="{% url 'detalhes_admin' produto.id_produto %}" enctype="multipart/form-data">
             {% csrf_token %}
-            
+
             <div class="form-group">
                 <label for="nome">Nome do Produto</label>
-                <input type="text" id="nome" name="nome" placeholder="Ex: Arroz" value="{{ produto.nome }}" required>
+                <input type="text" id="nome" name="nome" value="{{ produto.nome_produto }}" required>
             </div>
 
             <div class="form-group">
                 <label for="descricao">Descrição</label>
-                <textarea id="descricao" name="descricao" placeholder="Ex: Pacote de arroz branco, 5kg" required>{{ product.description }}</textarea>
+                <textarea id="descricao" name="descricao" required>{{ produto.descricao }}</textarea>
             </div>
 
             <div class="form-group">
                 <label for="quantidade">Quantidade em Stock</label>
-                <input type="number" id="quantidade" name="quantidade" placeholder="Ex: 30" min="0" value="{{ produto.quantidade }}" required>
+                <input type="number" id="quantidade" name="quantidade" min="0" value="{{ produto.quantidade }}" required>
             </div>
 
             <div class="form-group">
                 <label for="preco">Preço</label>
-                <input type="number" id="preco" name="preco" placeholder="Ex: 2.50" step="0.01" min="0" value="{{ produto.preco_produto }}" required>
+                <input type="number" id="preco" name="preco" step="0.01" min="0" value="{{ produto.preco }}" required>
             </div>
 
             <div class="form-group">
                 <label for="categoria">Categoria</label>
                 <select id="categoria" name="categoria" required>
-                    <option value="" disabled selected>Selecione uma categoria</option>
+                    <option value="" disabled>Selecione uma categoria</option>
                     {% for categoria in categorias %}
-                        <option value="{{ categoria.id_categoria }}">{{ categoria.nome_categoria }}</option>
+                        <option value="{{ categoria.id_categoria }}" 
+                            {% if categoria.nome_categoria == produto.id_subcategoria.nome_categoria %}selected{% endif %}>
+                            {{ categoria.nome_categoria }}
+                        </option>
                     {% empty %}
                         <option disabled>Nenhuma categoria disponível</option>
                     {% endfor %}
                 </select>
+            </div>
+
+            <!-- Upload de Nova Imagem -->
+            <div class="form-group">
+                <label for="imagem">Alterar Imagem do Produto</label>
+                <input type="file" id="imagem" name="imagem" accept="image/*">
             </div>
 
             <div class="form-buttons">

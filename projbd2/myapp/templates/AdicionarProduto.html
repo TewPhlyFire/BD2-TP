@@ -10,20 +10,11 @@
 <body>
     <header class="header">
         <div class="container">
-            <div class="buttonright">
-                <a class="customer-support" href="{% url 'about_us' %}">About Us</a>
-                
-            </div>
+            
             <div class="logo">
-                <a class="customer-support" href="{% url 'log_out' %}">log out</a>
-                <h1><a href="{% url 'home_page_login' %}">Mercado Machado</a></h1>
+                <h1><a>Mercado Machado</a></h1>
             </div>
-            <div class="buttonleft">
-                <a class="customer-support" href="{% url 'folheto' %}">Folheto</a>
-                <a class="customer-support" href="{% url 'cesto' %}">
-                    <img src="{% static 'img/Vector.png' %}" alt="Cesto" style="width: 20px; height: 20px;">
-                </a>
-            </div>
+            
         </div>
     </header>
 
@@ -41,41 +32,50 @@
 
         <form class="product-form" method="POST" action="{% url 'adicionar_produto' %}" enctype="multipart/form-data">
             {% csrf_token %}
-
+        
             <div class="form-group">
                 <label for="nome">Nome do Produto</label>
-                <input type="text" id="nome" name="nome" placeholder="Ex: Arroz" required>
+                <input type="text" id="nome" name="nome" required>
             </div>
-
+        
             <div class="form-group">
                 <label for="descricao">Descrição</label>
-                <textarea id="descricao" name="descricao" placeholder="Ex: Pacote de arroz branco, 5kg" required></textarea>
+                <textarea id="descricao" name="descricao"></textarea>
             </div>
-
+        
             <div class="form-group">
-                <label for="quantidade">Quantidade em Stock</label>
-                <input type="number" id="quantidade" name="quantidade" placeholder="Ex: 30" min="0" required>
+                <label for="preco_original">Preço Original</label>
+                <input type="number" id="preco_original" name="preco_original" step="0.01" required>
             </div>
-
+        
+            <div class="form-group">
+                <label for="preco">Preço com Desconto</label>
+                <input type="number" id="preco" name="preco" step="0.01" required>
+            </div>
+        
             <div class="form-group">
                 <label for="categoria">Categoria</label>
                 <select id="categoria" name="categoria" required>
                     <option value="" disabled selected>Selecione uma categoria</option>
                     {% for categoria in categorias %}
                         <option value="{{ categoria.id_categoria }}">{{ categoria.nome_categoria }}</option>
-                    {% empty %}
-                        <option disabled>Nenhuma categoria disponível</option>
                     {% endfor %}
                 </select>
             </div>
-
+        
             <div class="form-group">
-                <label for="preco">Preço</label>
-                <input type="number" id="preco" name="preco" placeholder="Ex: 2.50" step="0.01" min="0" required>
+                <label for="quantidade">Quantidade</label>
+                <input type="number" id="quantidade" name="quantidade" min="0" required>
             </div>
-
-            <button type="submit" class="submit-button">Adicionar</button>
+        
+            <div class="form-group">
+                <label for="imagem">Imagem do Produto</label>
+                <input type="file" id="imagem" name="imagem" accept="image/*" required>
+            </div>
+        
+            <button type="submit">Adicionar Produto</button>
         </form>
+        
     </main>
 
     <script>

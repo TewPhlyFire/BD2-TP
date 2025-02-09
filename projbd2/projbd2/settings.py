@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+from mongoengine import connect
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -80,13 +81,19 @@ WSGI_APPLICATION = 'projbd2.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Gringo',
+        'NAME': 'postgres',
         'USER': 'postgres',
-        'PASSWORD': 'revolver007',
+        'PASSWORD': '1234',
         'HOST': 'localhost',  # ou o endereço do servidor
-        'PORT': '5433',       # porta padrão do PostgreSQL
+        'PORT': '5432',       # porta padrão do PostgreSQL
     }
 }
+
+connect(
+    db="BDII",
+    host="localhost",
+    port=27017,
+)
 
 
 # Password validation

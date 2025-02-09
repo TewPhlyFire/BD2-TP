@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS Pedido;
-DROP TABLE IF EXISTS Produto;
 DROP TABLE IF EXISTS Promo;
+DROP TABLE IF EXISTS Produto;
 DROP TABLE IF EXISTS Categoria;
 DROP TABLE IF EXISTS Funcionario;
 DROP TABLE IF EXISTS Cliente;
@@ -39,7 +39,7 @@ CREATE TABLE Produto
     Nome_Produto            VARCHAR(100)                         NOT NULL, 
     Descricao               VARCHAR(100),
     Preco_original          DECIMAL(5,2)     DEFAULT 0.00        NOT NULL,
-    Preco_Produto           DECIMAL(5,2)     DEFAULT 0.00        NOT NULL, 
+    Preco                   DECIMAL(5,2)     DEFAULT 0.00        NOT NULL, 
     Id_subcategoria         INT, 
     Quantidade              INT              DEFAULT 0, 
     

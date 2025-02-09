@@ -50,7 +50,7 @@
                     <td>{{ produto.nome_produto }}</td>
                     <td>{{ produto.descricao }}</td>
                     <td>{{ produto.quantidade }}</td>
-                    <td>{{ produto.preco_produto }}</td>
+                    <td>{{ produto.preco }}</td>
                     <td>{{ produto.id_subcategoria.nome_categoria }}</td>  <!-- Supondo que 'id_subcategoria' é uma relação com a categoria -->
                     <td>            
                         <a href="{% url 'detalhes_admin' produto.id_produto %}">

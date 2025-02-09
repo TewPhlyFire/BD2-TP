@@ -15,24 +15,47 @@
         </div>
 
         <!-- Formulário de Login -->
-        <form action="{% url 'login' %}" method="POST">
+        <form id="login-form" action="{% url 'login' %}" method="POST">
             {% csrf_token %}
-            <!-- Inputs -->
             <div class="input1">
                 <input type="text" name="username" placeholder="Username/Email" required>
             </div>
             <div class="input">
                 <input type="password" name="password" placeholder="Password" required>
             </div>
+            {% if error_message %}
+                <p style="color: red;">{{ error_message }}</p>
+            {% endif %}
 
-            <!-- Botões -->
             <button type="submit" class="button">Log in</button>
-            <button class="button" onclick="window.location.href='{% url 'registar' %}'">Registar</button>
-            <button class="button" onclick="window.location.href='{% url 'login_admin' %}'">Log in as Admin</button>
+            <button type="button" class="button" onclick="window.location.href='{% url 'registar' %}'">Registar</button>
+            <button type="button" class="button" onclick="window.location.href='{% url 'login_admin' %}'">Log in as Admin</button>
         </form>
-
-        <!-- Botão de Registro -->
-
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            {% if request.session.cliente %}
+                console.log("entrei no if");
+                let userData = {
+                    nif: "{{ request.session.cliente.nif }}",
+                    nome: "{{ request.session.cliente.nome }}",
+                    sobrenome: "{{ request.session.cliente.sobrenome }}",
+                    telefone: "{{ request.session.cliente.telefone }}",
+                    morada: "{{ request.session.cliente.morada }}",
+                    email: "{{ request.session.cliente.email }}"
+                };
+
+                // Converter para JSON e salvar no Local Storage
+                localStorage.setItem("user", JSON.stringify(userData));
+
+                // Verificar se os dados foram salvos
+                console.log("Dados do usuário salvos:", localStorage.getItem("user"));
+
+                // Redirecionar para a página principal
+                window.location.href = "{% url 'home_page_login' %}";
+            {% endif %}
+        });
+    </script>
 </body>
 </html>

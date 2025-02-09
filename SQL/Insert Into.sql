@@ -23,7 +23,7 @@ VALUES
 (3, 'Vestuário');
 
 -- Inserir na tabela Produto
-INSERT INTO Produto (Nome_Produto, Descricao, Preco_original, Preco_Produto, Id_subcategoria, Quantidade)
+INSERT INTO Produto (Nome_Produto, Descricao, Preco_original, Preco, Id_subcategoria, Quantidade)
 VALUES
 ('Smartphone', 'Celular com tela de 6.5"', 500.00, 500.00, 1, 10),
 ('Sofá', 'Sofá de 3 lugares', 300.00, 300.00, 2, 5),

@@ -8,6 +8,84 @@ body {
     font-family: Arial, sans-serif;
     box-sizing: border-box;
 }
+/* Fundo preto para o carrossel */
+#promoCarousel {
+    background-color: black;
+    width: 100vw;
+}
+
+/* Para garantir que o carrossel ocupe toda a largura */
+.carousel-inner {
+    width: 100%;
+}
+
+/* Cada item deve ocupar a tela inteira */
+.carousel-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-height: fit-content
+}
+
+/* Cartão de promoção */
+.promo-card {
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.1); /* Fundo semitransparente */
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+    max-width: 500px; /* Limita o tamanho do conteúdo */
+}
+
+/* Imagem do produto */
+.promo-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.promotion {
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.1); /* Fundo semitransparente */
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+    max-width: 70%; /* Limita o tamanho do conteúdo */
+}
+
+/* Imagem do produto */
+.promo-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+/* Estilização dos preços */
+.original-price {
+    text-decoration: line-through;
+    font-size: 18px;
+    color: red;
+}
+
+.discounted-price {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+}
+
+.discount-percentage {
+    font-size: 20px;
+    font-weight: bold;
+    color: limegreen;
+}
+
+/* Botão de descrição */
+.btn-light {
+    background-color: white;
+    color: black;
+    border-radius: 20px;
+    padding: 10px 20px;
+}
 
 .header {
     background-color: #ff69b4;
@@ -50,6 +128,20 @@ body {
     border-radius: 5px;
     cursor: pointer;
 }
+
+.carousel-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 400px; /* Ajuste conforme necessário */
+}
+
+.promo-card {
+    max-width: 80%; /* Para evitar que o conteúdo fique muito espalhado */
+    margin: auto;
+}
+
 
 .search-bar {
     width: 50%; /* Ajustado para ser menor */

@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mercado Machado</title>
     <link rel="stylesheet" href="{% static 'css/HomePageLogin.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
 </head>
 <body>
     <header class="header">
@@ -26,31 +29,44 @@
         </div>
     </header>
     
-    <section class="hero">
-        <div class="hero-content">
-            <div class="hero-image">
-                <img src="https://via.placeholder.com/350x200" alt="Image 1">
-                <button class="btn">Descobre Mais</button>
-            </div>
-            <div class="hero-image">
-                <img src="https://via.placeholder.com/350x200" alt="Image 2">
-                <button class="btn">Descobre Mais</button>
-            </div>
-        </div>
-    </section>
 
     {% if promos %}
-    <section class="promo-section">
-        {% for promo in promos %}
-        <div class="promo-card">
-            <img src="{{ promo.image_url }}" alt="Promo Image">
-            <h3>{{ promo.nome_produto }}</h3>
-            <p>{{ promo.preco_produto }}</p>
-            <a href="{% url 'descobre_mais' promo.id_produto %}" class="promo-btn">Descrição</a>
+    <h1>Promoções</h1>
+    <div id="promoCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            {% for promo in promos %}
+                {% for produto in produtos %}
+                    {% if promo.id_produto.id_produto == produto.id_produto %}
+                        <div class="carousel-item {% if forloop.parentloop.first %}active{% endif %}">
+                            <div class="promotion text-center">
+                                <img src="{{ promo.image_url }}" class="d-block mx-auto" alt="Promo Image" style="max-width: 300px;">
+                                <h3>{{ produto.nome_produto }}</h3>
+                                <p>
+                                    <span class="original-price" style="text-decoration: line-through; font-size: smaller;">{{ produto.preco_original }}</span>
+                                    <span class="discounted-price" style="font-weight: bold;">{{ produto.preco }}</span>
+                                    <span class="discount-percentage" style="color: green; font-weight: bold;">-{{ promo.desconto }}%</span>
+                                </p>
+                                <a href="{% url 'descobre_mais' promo.id_produto.id_produto %}" class="btn btn-primary">Descrição</a>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
         </div>
-        {% endfor %}
-    </section>
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#promoCarousel" data-bs-slide="prev">
+            <span><i class="fas fa-chevron-left text-black"></i></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#promoCarousel" data-bs-slide="next">
+            <span><i class="fas fa-chevron-right text-black"></i></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+        
+    </div>
     {% endif %}
+
+
 
     <section class="categories-section">
         {% for category in categories %}
@@ -58,13 +74,13 @@
                 <div class="category">
                     <h2>{{ category.nome_categoria }}</h2>
                     <ul class="product-list">
-                        {% for promo in promos %}
-                        {% if promo.id_subcategoria.id_subcategoria == category.id_subcategoria %}
+                        {% for produto in produtos %}
+                        {% if produto.id_subcategoria.id_subcategoria == category.id_subcategoria %}
                         <div class="promo-card">
                             <img src="{{ promo.image_url }}" alt="Promo Image">
-                            <h3>{{ promo.nome_produto }}</h3>
-                            <p>{{ promo.preco_produto }}</p>
-                            <a href="{% url 'descobre_mais' promo.id_produto %}" class="promo-btn">Descrição</a>
+                            <h3>{{ produto.nome_produto }}</h3>
+                            <p>{{ produto.preco }}</p>
+                            <a href="{% url 'descobre_mais' produto.id_produto %}" class="promo-btn">Descrição</a>
                         </div>
                         {% endif %}
                         {% endfor %}
@@ -73,5 +89,7 @@
             {% endif %}
         {% endfor %}
     </section>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

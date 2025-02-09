@@ -75,7 +75,6 @@
             <div class="buttonright">
                 <a class="customer-support" href="{% url 'log_out' %}">log out</a>
                 <a class="customer-support" href="{% url 'about_us' %}">About Us</a>
-                
             </div>
             <div class="logo">
                 <h1><a href="{% url 'home_page_login' %}">Mercado Machado</a></h1>
@@ -95,7 +94,7 @@
             <div class="descricao">Descrição: {{ produto.descricao }}</div>
             <div class="stock">Stock: {{ produto.quantidade }}</div>
             <div class="category">Categoria: {{ produto.id_subcategoria.nome_categoria }}</div>
-            <div class="preco">Preço: {{ produto.preco_produto }}$</div>
+            <div class="preco">Preço: {{ produto.preco }}$</div>
 
             <div class="quantity-controls">
                 <button class="decrement">-</button>
@@ -108,6 +107,8 @@
     </div>
 
     <script>
+        const produtoQuantidade = {{ produto.quantidade }};  // Passa o valor do estoque do produto para o JS
+
         const decrementButton = document.querySelector('.decrement');
         const incrementButton = document.querySelector('.increment');
         const quantityDisplay = document.querySelector('.quantity');
@@ -123,8 +124,10 @@
 
         incrementButton.addEventListener('click', () => {
             let quantity = parseInt(quantityDisplay.textContent);
-            quantity++;
-            quantityDisplay.textContent = quantity;
+            if (quantity < produtoQuantidade) {
+                quantity++;
+                quantityDisplay.textContent = quantity;
+            }
         });
 
         addToCartButton.addEventListener('click', () => {
@@ -132,6 +135,28 @@
             alert(`Adicionado ${quantity} unidade(s) ao carrinho!`);
             // Aqui você pode adicionar lógica para enviar a quantidade ao backend usando AJAX, por exemplo.
         });
+
+        addToCartButton.addEventListener('click', () => {
+    const quantity = quantityDisplay.textContent;
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const produtoId = {{ produto.id_produto }};
+
+    // Adicionar o item ao carrinho, verificando se o produto já existe no carrinho
+    const existingItemIndex = cart.findIndex(item => item.produtoId === produtoId);
+    if (existingItemIndex !== -1) {
+        cart[existingItemIndex].quantidade += parseInt(quantity);  // Atualizar a quantidade
+    } else {
+        cart.push({ produtoId: produtoId, quantidade: parseInt(quantity) });
+    }
+
+    // Verificar o conteúdo do carrinho
+    console.log('Carrinho após atualização:', cart);
+
+    // Armazenar o carrinho no localStorage
+    localStorage.setItem('cart', JSON.stringify(cart));
+    alert(`Adicionado ${quantity} unidade(s) ao carrinho!`);
+});
+
     </script>
 </body>
 </html>

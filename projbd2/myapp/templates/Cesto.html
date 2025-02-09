@@ -9,13 +9,11 @@
 </head>
 
 <body>
- 
     <header class="header">
         <div class="container">
             <div class="buttonright">
                 <a class="customer-support" href="{% url 'log_out' %}">log out</a>
                 <a class="customer-support" href="{% url 'about_us' %}">About Us</a>
-                
             </div>
             <div class="logo">
                 <h1><a href="{% url 'home_page_login' %}">Mercado Machado</a></h1>
@@ -28,103 +26,139 @@
             </div>
         </div>
     </header>
-        <div class="search-bar">
-            <input type="text" placeholder="Pesquisar">
-        </div>
-    </header>
+
+
     <h1>Carrinho de Compras</h1>
-    <style>
-      h1 {
-        text-align: center;
-        color: white; /* Define a cor do texto como branco */
-      }
-  
-      body {
-        background-color: #000000; /* Fundo escuro para contraste */
-      }
-    </style>
+
     <section class="promo-section">
-        <div class="promo-card">
-            <img src="https://via.placeholder.com/150x150" alt="Promo Image">
-            <div class="card-content">
-                <div class="title">Batatas</div>
-                <div class="description">Descrição: dasbdkjsahkaskkaaskabs</div>
-                    <div class="juntos">
-                    <button class="cancel-button">Cancel</button>
-                    <div>                   
-                        <button class="decrement">-</button>
-                        <span class="quantity">1</span>
-                        <button class="increment">+</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="promo-card">
-            <img src="https://via.placeholder.com/150x150" alt="Promo Image">
-            <div class="card-content">
-                <div class="title">Batatas</div>
-                <div class="description">Descrição: dasbdkjsahkaskkaaskabs</div>
-                    <div class="juntos">
-                    <button class="cancel-button">Cancel</button>
-                    <div>                   
-                        <button class="decrement">-</button>
-                        <span class="quantity">1</span>
-                        <button class="increment">+</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="promo-card">
-            <img src="https://via.placeholder.com/150x150" alt="Promo Image">
-            <div class="card-content">
-                <div class="title">Batatas</div>
-                <div class="description">Descrição: dasbdkjsahkaskkaaskabs</div>
-                    <div class="juntos">
-                    <button class="cancel-button">Cancel</button>
-                    <div>                   
-                        <button class="decrement">-</button>
-                        <span class="quantity">1</span>
-                        <button class="increment">+</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- Os cards de produtos serão inseridos dinamicamente -->
     </section>
-<div class="compra">
-    <a class="customer-support" href="#cesto" style="background-color: green;">
-        <img src="{% static 'img/Vector.png' %}" alt="cesto" style="width: 20px; height: 20px; background-color: green;" >
-    </button>
-</div>  
+
+    
+
     <script>
-        // Seleciona todos os botões de incremento e decremento
-        const decrementButtons = document.querySelectorAll('.decrement');
-        const incrementButtons = document.querySelectorAll('.increment');
+        // Recupera os itens do carrinho do localStorage
+       // Passando a lista de produtos para o JavaScript
+    const produtos = JSON.parse('{{ produtos|safe }}');  
+    console.log(produtos);
 
-        // Adiciona evento a todos os botões de decremento
-        decrementButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const card = button.closest('.promo-card'); // Seleciona o card onde o botão foi clicado
-                const quantityDisplay = card.querySelector('.quantity'); // Encontra o contador dentro do card
-                let quantity = parseInt(quantityDisplay.textContent); // Converte o valor para número
-                
-                if (quantity > 1) {
-                    quantity--;
-                    quantityDisplay.textContent = quantity; // Atualiza o valor
-                }
-            });
-        });
+// Obtenha os cartItems do localStorage
+const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+console.log(cartItems);
+const promoSection = document.querySelector('.promo-section');
 
-        // Adiciona evento a todos os botões de incremento
-        incrementButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const card = button.closest('.promo-card'); // Seleciona o card onde o botão foi clicado
-                const quantityDisplay = card.querySelector('.quantity'); // Encontra o contador dentro do card
-                let quantity = parseInt(quantityDisplay.textContent); // Converte o valor para número
-                
-                quantity++;
-                quantityDisplay.textContent = quantity; // Atualiza o valor
+cartItems.forEach(product => {
+    const productCard = document.createElement('div');
+    productCard.classList.add('promo-card');
+    
+    console.log("product card:", productCard);  
+    // Encontrando o item correspondente no localStorage
+    console.log("Produto ID:", product.produtoId);
+    const cartItem = cartItems.find(item => item.produtoId === product.produtoId);
+    console.log("Cart Item:", cartItem);
+    const quantity = cartItem ? cartItem.quantidade : 0;
+
+    let productFound = false;
+    produtos.forEach(promo => {
+        // Comparar os ids dos produtos
+        if (promo.id_produto === product.produtoId) {
+            productFound = true;  // Produto encontrado
+            productCard.setAttribute('data-id', promo.id_produto); // Adiciona o ID do produto como atributo
+
+            productCard.innerHTML = `
+                <img src="https://via.placeholder.com/150x150" alt="Promo Image">
+                <div class="card-content">
+                    <h3>${promo.nome_produto}</h3>
+                    <p>${promo.preco_produto}</p>
+                    <div class="juntos">
+                        <button class="cancel-button">Remover</button>
+                        <div>
+                            <button class="decrement">-</button>
+                            <span class="quantity">${quantity}</span>
+                            <button class="increment">+</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            const cancelButton = productCard.querySelector('.cancel-button');
+            cancelButton.addEventListener('click', () => {
+                removeProductFromCart(product.produtoId, productCard);
             });
-        });
+        }
+    });
+
+    // Só adiciona ao DOM se o produto for encontrado
+    if (productFound) {
+        promoSection.appendChild(productCard);
+    }
+});
+function removeProductFromCart(productId, productCard) {
+    // Filtra os itens do carrinho, removendo o produto com o ID fornecido
+    const updatedCartItems = cartItems.filter(item => item.produtoId !== productId);
+    
+    // Atualiza o localStorage com a nova lista do carrinho
+    localStorage.setItem('cart', JSON.stringify(updatedCartItems));
+
+    // Remove o cartão do DOM
+    promoSection.removeChild(productCard);
+
+    // Atualiza a lista local de cartItems
+    cartItems.length = 0; // Limpa o array original
+    updatedCartItems.forEach(item => cartItems.push(item));
+
+    console.log('Produto removido:', productId);
+}
+
+      // Atualizar quantidade de produtos no carrinho
+const decrementButtons = document.querySelectorAll('.decrement');
+const incrementButtons = document.querySelectorAll('.increment');
+
+decrementButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const card = button.closest('.promo-card');
+        const quantityDisplay = card.querySelector('.quantity');
+        let quantity = parseInt(quantityDisplay.textContent);
+
+        if (quantity > 1) {
+            quantity--;
+            quantityDisplay.textContent = quantity;
+            updateCartQuantity(card, quantity);
+        }
+    });
+});
+
+incrementButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const card = button.closest('.promo-card');
+        const quantityDisplay = card.querySelector('.quantity');
+        let quantity = parseInt(quantityDisplay.textContent);
+
+        quantity++;
+        quantityDisplay.textContent = quantity;
+        updateCartQuantity(card, quantity);
+    });
+});
+
+// Função para atualizar a quantidade no localStorage
+function updateCartQuantity(card, quantity) {
+    // Pegando o ID do produto diretamente do atributo 'data-id'
+    const productId = parseInt(card.getAttribute('data-id'));
+    console.log("Product ID:", productId);
+    
+    if (isNaN(productId)) {
+        console.error('ID do produto não encontrado ou inválido.');
+        return;
+    }
+
+    const cartItem = cartItems.find(item => item.produtoId === productId);
+    if (cartItem) {
+        cartItem.quantidade = quantity;
+    }
+
+    // Atualiza o localStorage com as novas informações do carrinho
+    localStorage.setItem('cart', JSON.stringify(cartItems));
+}
+
     </script>
 </body>
 </html>
