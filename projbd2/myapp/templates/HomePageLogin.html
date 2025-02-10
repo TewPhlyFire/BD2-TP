@@ -1,4 +1,6 @@
 {% load static %}
+{% load custom_filters %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +10,6 @@
     <link rel="stylesheet" href="{% static 'css/HomePageLogin.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-
 </head>
 <body>
     <header class="header">
@@ -28,7 +29,6 @@
             </div>
         </div>
     </header>
-    
 
     {% if promos %}
     <h1>Promoções</h1>
@@ -39,7 +39,13 @@
                     {% if promo.id_produto.id_produto == produto.id_produto %}
                         <div class="carousel-item {% if forloop.parentloop.first %}active{% endif %}">
                             <div class="promotion text-center">
-                                <img src="{{ promo.image_url }}" class="d-block mx-auto" alt="Promo Image" style="max-width: 300px;">
+                                <!-- Exibir imagem do MongoDB se existir -->
+                                {% if imagens_produtos|default_if_none:''|dict_has_key:produto.id_produto %}
+                                    <img src="data:image/png;base64,{{ imagens_produtos|default_if_none:''|dict_get:produto.id_produto }}" class="d-block mx-auto" alt="Promo Image" style="max-width: 300px;">
+                                {% else %}
+                                    <img src="{% static 'img/default.png' %}" class="d-block mx-auto" alt="Promo Image" style="max-width: 300px;">
+                                {% endif %}
+
                                 <h3>{{ produto.nome_produto }}</h3>
                                 <p>
                                     <span class="original-price" style="text-decoration: line-through; font-size: smaller;">{{ produto.preco_original }}</span>
@@ -62,11 +68,8 @@
             <span><i class="fas fa-chevron-right text-black"></i></span>
             <span class="visually-hidden">Next</span>
         </button>
-        
     </div>
     {% endif %}
-
-
 
     <section class="categories-section">
         {% for category in categories %}
@@ -75,21 +78,27 @@
                     <h2>{{ category.nome_categoria }}</h2>
                     <ul class="product-list">
                         {% for produto in produtos %}
-                        {% if produto.id_subcategoria.id_subcategoria == category.id_subcategoria %}
-                        <div class="promo-card">
-                            <img src="{{ promo.image_url }}" alt="Promo Image">
-                            <h3>{{ produto.nome_produto }}</h3>
-                            <p>{{ produto.preco }}</p>
-                            <a href="{% url 'descobre_mais' produto.id_produto %}" class="promo-btn">Descrição</a>
-                        </div>
-                        {% endif %}
+                            {% if produto.id_subcategoria.id_subcategoria == category.id_subcategoria %}
+                                <div class="promo-card">
+                                    <!-- Exibir imagem do MongoDB se existir -->
+                                    {% if imagens_produtos|default_if_none:''|dict_has_key:produto.id_produto %}
+                                        <img src="data:image/png;base64,{{ imagens_produtos|default_if_none:''|dict_get:produto.id_produto }}" alt="Produto">
+                                    {% else %}
+                                        <img src="{% static 'img/default.png' %}" alt="Produto">
+                                    {% endif %}
+
+                                    <h3>{{ produto.nome_produto }}</h3>
+                                    <p>{{ produto.preco }}</p>
+                                    <a href="{% url 'descobre_mais' produto.id_produto %}" class="promo-btn">Descrição</a>
+                                </div>
+                            {% endif %}
                         {% endfor %}
                     </ul>
                 </div>
             {% endif %}
         {% endfor %}
     </section>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -30,6 +30,11 @@
             margin: 10px 0;
         }
 
+        .product-image {
+            max-width: 300px;
+            margin-bottom: 15px;
+        }
+
         .quantity-controls {
             display: flex;
             justify-content: center;
@@ -90,6 +95,13 @@
 
     <div class="product-details">
         <div class="cenas">
+            <!-- Exibir a Imagem do Produto -->
+            {% if imagem %}
+                <img src="data:image/png;base64,{{ imagem }}" alt="{{ produto.nome_produto }}" class="product-image">
+            {% else %}
+                <img src="{% static 'img/default.png' %}" alt="Imagem Indisponível" class="product-image">
+            {% endif %}
+
             <div class="nome"><h3>{{ produto.nome_produto }}</h3></div>
             <div class="descricao">Descrição: {{ produto.descricao }}</div>
             <div class="stock">Stock: {{ produto.quantidade }}</div>
@@ -132,31 +144,24 @@
 
         addToCartButton.addEventListener('click', () => {
             const quantity = quantityDisplay.textContent;
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const produtoId = {{ produto.id_produto }};
+
+            // Adicionar o item ao carrinho, verificando se o produto já existe no carrinho
+            const existingItemIndex = cart.findIndex(item => item.produtoId === produtoId);
+            if (existingItemIndex !== -1) {
+                cart[existingItemIndex].quantidade += parseInt(quantity);  // Atualizar a quantidade
+            } else {
+                cart.push({ produtoId: produtoId, quantidade: parseInt(quantity) });
+            }
+
+            // Verificar o conteúdo do carrinho
+            console.log('Carrinho após atualização:', cart);
+
+            // Armazenar o carrinho no localStorage
+            localStorage.setItem('cart', JSON.stringify(cart));
             alert(`Adicionado ${quantity} unidade(s) ao carrinho!`);
-            // Aqui você pode adicionar lógica para enviar a quantidade ao backend usando AJAX, por exemplo.
         });
-
-        addToCartButton.addEventListener('click', () => {
-    const quantity = quantityDisplay.textContent;
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const produtoId = {{ produto.id_produto }};
-
-    // Adicionar o item ao carrinho, verificando se o produto já existe no carrinho
-    const existingItemIndex = cart.findIndex(item => item.produtoId === produtoId);
-    if (existingItemIndex !== -1) {
-        cart[existingItemIndex].quantidade += parseInt(quantity);  // Atualizar a quantidade
-    } else {
-        cart.push({ produtoId: produtoId, quantidade: parseInt(quantity) });
-    }
-
-    // Verificar o conteúdo do carrinho
-    console.log('Carrinho após atualização:', cart);
-
-    // Armazenar o carrinho no localStorage
-    localStorage.setItem('cart', JSON.stringify(cart));
-    alert(`Adicionado ${quantity} unidade(s) ao carrinho!`);
-});
-
     </script>
 </body>
 </html>

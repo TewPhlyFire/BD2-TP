@@ -17,6 +17,9 @@ urlpatterns = [
     path('UserPage/<int:nif_cliente>/', views.UserPage, name='UserPage'),
     path('editar_perfil/<int:nif_cliente>/', views.editar_perfil, name='editar_perfil'),
     path('login_admin/', views.login_admin, name='login_admin'),
+     path("promocoes/", views.listar_promocoes, name="listar_promocoes"),
+    path("promocoes/editar/<int:promo_id>/", views.editar_promocao, name="editar_promocao"),
+    path("promocoes/excluir/<int:promo_id>/", views.excluir_promocao, name="excluir_promocao"),
 
 ]
 

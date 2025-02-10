@@ -63,16 +63,48 @@ def adicionar_produto(request):
 
 # View para a página 'Cesto'
 def cesto(request):
-    # Supondo que você tenha um modelo Produto no Django
-    produtos = Produto.objects.all()  # Obtenha todos os produtos disponíveis
-    produtos_json = json.dumps([produto.to_dict() for produto in produtos])
+    # Obter todos os produtos do PostgreSQL
+    produtos = Produto.objects.all()
+
+    # Criar uma lista para armazenar os produtos + imagem
+    produtos_lista = []
+
+    for produto in produtos:
+        # Buscar a imagem no MongoDB associada ao produto
+        produto_imagem = ProdutoImagem.objects(id_prodref=produto.id_produto).first()
+
+        # Converter imagem para Base64 se existir
+        imagem_base64 = base64.b64encode(produto_imagem.imagens).decode("utf-8") if produto_imagem else None
+
+        # Adicionar os dados do produto ao JSON
+        produtos_lista.append({
+            "id_produto": produto.id_produto,
+            "nome_produto": produto.nome_produto,
+            "preco_produto": float(produto.preco),  # Converter Decimal para float para evitar erro no JSON
+            "imagem": imagem_base64  # Adiciona a imagem ao JSON
+        })
+
+    # Converter para JSON
+    produtos_json = json.dumps(produtos_lista)
+
     return render(request, 'cesto.html', {'produtos': produtos_json})
 
 # View para a página 'DescobreMais'
 def descobre_mais(request, produto_id):
-    # Recupera o produto com o id fornecido
-    produto = Produto.objects.get(id_produto=produto_id)
-    return render(request, 'DescobreMais.html', {'produto': produto})
+    # Recupera o produto do PostgreSQL
+    produto = get_object_or_404(Produto, id_produto=produto_id)
+
+    # Buscar a imagem no MongoDB associada ao produto
+    produto_imagem = ProdutoImagem.objects(id_prodref=produto.id_produto).first()
+    
+    # Converter a imagem para Base64 para exibição no template
+    imagem_base64 = base64.b64encode(produto_imagem.imagens).decode("utf-8") if produto_imagem else None
+
+    return render(request, 'DescobreMais.html', {
+        'produto': produto,
+        'imagem': imagem_base64  # Passamos a imagem para o template
+    })
+
 # View para a página 'DetalhesAdmin'
 def detalhes_admin(request, produto_id):
     # Recupera o produto com base no ID do PostgreSQL
@@ -124,16 +156,50 @@ def detalhes_admin(request, produto_id):
 
 # View para a página 'Folheto'
 def folheto(request):
-    promos = Produto.objects.all()
-    return render(request, 'Folheto.html', {'promos': promos})
+    promos = Promo.objects.all()
+    produtos = Produto.objects.all()
+
+    # Criar um dicionário de imagens associadas aos produtos
+    imagens_produtos = {}
+    for produto in produtos:
+        produto_imagem = ProdutoImagem.objects(id_prodref=produto.id_produto).first()
+        if produto_imagem:
+            imagens_produtos[produto.id_produto] = base64.b64encode(produto_imagem.imagens).decode("utf-8")
+
+    return render(
+        request, 
+        'Folheto.html', 
+        {
+            'produtos': produtos, 
+            'promos': promos,
+            'imagens_produtos': imagens_produtos  # Passamos o dicionário para o template
+        }
+    )
+    
 
     # View para a página 'HomePageLogin'
 def home_page_login(request):
     promos = Promo.objects.all()
     produtos = Produto.objects.all()
     categories = Categoria.objects.all()
-    return render(request, 'HomePageLogin.html', {'produtos': produtos, 'categories': categories, 'promos': promos})
 
+    # Criar um dicionário de imagens associadas aos produtos
+    imagens_produtos = {}
+    for produto in produtos:
+        produto_imagem = ProdutoImagem.objects(id_prodref=produto.id_produto).first()
+        if produto_imagem:
+            imagens_produtos[produto.id_produto] = base64.b64encode(produto_imagem.imagens).decode("utf-8")
+
+    return render(
+        request, 
+        'HomePageLogin.html', 
+        {
+            'produtos': produtos, 
+            'categories': categories, 
+            'promos': promos,
+            'imagens_produtos': imagens_produtos  # Passamos o dicionário para o template
+        }
+    )
 # View para a página 'UserPage'
 def UserPage(request, nif_cliente):
     with connection.cursor() as cursor:
@@ -242,3 +308,65 @@ def registar(request):
 # View para a página 'Registrar'
 def registrar(request):
     return render(request, 'Registrar.html')
+
+
+
+
+def listar_promocoes(request):
+    # Buscar promoções existentes
+    promocoes = Promo.objects.all()
+    produtos = Produto.objects.all()  # Produtos para criação de promoções
+
+    if request.method == "POST":
+        id_produto = request.POST["id_produto"]
+        data_inicio = request.POST["data_inicio"]
+        data_fim = request.POST["data_fim"]
+        desconto = request.POST["desconto"]
+
+        # Inserir a nova promoção no banco de dados
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                INSERT INTO promo (id_produto, data_inicio, data_fim, desconto) 
+                VALUES (%s, %s, %s, %s)
+                """,
+                [id_produto, data_inicio, data_fim, desconto],
+            )
+
+        return redirect("listar_promocoes")
+
+    return render(request, "Promolist.html", {"promocoes": promocoes, "produtos": produtos})
+
+
+def editar_promocao(request, promo_id):
+    promocao = get_object_or_404(Promo, id_promo=promo_id)
+    produtos = Produto.objects.all()
+
+    if request.method == "POST":
+        id_produto = request.POST["id_produto"]
+        data_inicio = request.POST["data_inicio"]
+        data_fim = request.POST["data_fim"]
+        desconto = request.POST["desconto"]
+
+        # Atualizar a promoção no banco de dados
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                UPDATE promo 
+                SET id_produto = %s, data_inicio = %s, data_fim = %s, desconto = %s
+                WHERE id_promo = %s
+                """,
+                [id_produto, data_inicio, data_fim, desconto, promo_id],
+            )
+
+        return redirect("listar_promocoes")
+
+    return render(request, "editar_promocao.html", {"promocao": promocao, "produtos": produtos})
+
+
+def excluir_promocao(request, promo_id):
+    with connection.cursor() as cursor:
+        cursor.execute("DELETE FROM promo WHERE id_promo = %s", [promo_id])
+
+    return redirect("listar_promocoes")
+

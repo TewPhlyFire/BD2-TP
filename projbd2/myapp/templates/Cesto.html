@@ -27,138 +27,110 @@
         </div>
     </header>
 
-
     <h1>Carrinho de Compras</h1>
 
     <section class="promo-section">
-        <!-- Os cards de produtos serão inseridos dinamicamente -->
+        <!-- Os produtos serão inseridos dinamicamente -->
     </section>
 
-    
-
     <script>
-        // Recupera os itens do carrinho do localStorage
-       // Passando a lista de produtos para o JavaScript
-    const produtos = JSON.parse('{{ produtos|safe }}');  
-    console.log(produtos);
+        // Passa os produtos do Django para JavaScript
+        const produtos = JSON.parse('{{ produtos|safe }}');  
+        console.log("Produtos disponíveis:", produtos);
 
-// Obtenha os cartItems do localStorage
-const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
-console.log(cartItems);
-const promoSection = document.querySelector('.promo-section');
+        // Obter os itens do carrinho do localStorage
+        const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+        console.log("Itens no carrinho:", cartItems);
+        const promoSection = document.querySelector('.promo-section');
 
-cartItems.forEach(product => {
-    const productCard = document.createElement('div');
-    productCard.classList.add('promo-card');
-    
-    console.log("product card:", productCard);  
-    // Encontrando o item correspondente no localStorage
-    console.log("Produto ID:", product.produtoId);
-    const cartItem = cartItems.find(item => item.produtoId === product.produtoId);
-    console.log("Cart Item:", cartItem);
-    const quantity = cartItem ? cartItem.quantidade : 0;
+        cartItems.forEach(product => {
+            const productCard = document.createElement('div');
+            productCard.classList.add('promo-card');
 
-    let productFound = false;
-    produtos.forEach(promo => {
-        // Comparar os ids dos produtos
-        if (promo.id_produto === product.produtoId) {
-            productFound = true;  // Produto encontrado
-            productCard.setAttribute('data-id', promo.id_produto); // Adiciona o ID do produto como atributo
+            // Encontrar o produto na lista de produtos
+            const produto = produtos.find(p => p.id_produto === product.produtoId);
+            
+            if (produto) {
+                const quantity = product.quantidade;
+                productCard.setAttribute('data-id', produto.id_produto);
 
-            productCard.innerHTML = `
-                <img src="https://via.placeholder.com/150x150" alt="Promo Image">
-                <div class="card-content">
-                    <h3>${promo.nome_produto}</h3>
-                    <p>${promo.preco_produto}</p>
-                    <div class="juntos">
-                        <button class="cancel-button">Remover</button>
-                        <div>
-                            <button class="decrement">-</button>
-                            <span class="quantity">${quantity}</span>
-                            <button class="increment">+</button>
+                // Verifica se há uma imagem no MongoDB, senão usa uma padrão
+                const imageUrl = produto.imagem ? `data:image/png;base64,${produto.imagem}` : "{% static 'img/default.png' %}";
+
+                productCard.innerHTML = `
+                    <img src="${imageUrl}" alt="Imagem do Produto" style="max-width: 150px;">
+                    <div class="card-content">
+                        <h3>${produto.nome_produto}</h3>
+                        <p>${produto.preco_produto}$</p>
+                        <div class="juntos">
+                            <button class="cancel-button">Remover</button>
+                            <div>
+                                <button class="decrement">-</button>
+                                <span class="quantity">${quantity}</span>
+                                <button class="increment">+</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `;
-            const cancelButton = productCard.querySelector('.cancel-button');
-            cancelButton.addEventListener('click', () => {
-                removeProductFromCart(product.produtoId, productCard);
-            });
+                `;
+
+                // Adicionar funcionalidade ao botão de remover
+                const cancelButton = productCard.querySelector('.cancel-button');
+                cancelButton.addEventListener('click', () => {
+                    removeProductFromCart(product.produtoId, productCard);
+                });
+
+                promoSection.appendChild(productCard);
+            }
+        });
+
+        // Função para remover produto do carrinho
+        function removeProductFromCart(productId, productCard) {
+            const updatedCartItems = cartItems.filter(item => item.produtoId !== productId);
+            localStorage.setItem('cart', JSON.stringify(updatedCartItems));
+            promoSection.removeChild(productCard);
+            console.log('Produto removido:', productId);
         }
-    });
 
-    // Só adiciona ao DOM se o produto for encontrado
-    if (productFound) {
-        promoSection.appendChild(productCard);
-    }
-});
-function removeProductFromCart(productId, productCard) {
-    // Filtra os itens do carrinho, removendo o produto com o ID fornecido
-    const updatedCartItems = cartItems.filter(item => item.produtoId !== productId);
-    
-    // Atualiza o localStorage com a nova lista do carrinho
-    localStorage.setItem('cart', JSON.stringify(updatedCartItems));
+        // Atualizar quantidade de produtos no carrinho
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('decrement')) {
+                const card = event.target.closest('.promo-card');
+                const quantityDisplay = card.querySelector('.quantity');
+                let quantity = parseInt(quantityDisplay.textContent);
 
-    // Remove o cartão do DOM
-    promoSection.removeChild(productCard);
+                if (quantity > 1) {
+                    quantity--;
+                    quantityDisplay.textContent = quantity;
+                    updateCartQuantity(card, quantity);
+                }
+            }
 
-    // Atualiza a lista local de cartItems
-    cartItems.length = 0; // Limpa o array original
-    updatedCartItems.forEach(item => cartItems.push(item));
+            if (event.target.classList.contains('increment')) {
+                const card = event.target.closest('.promo-card');
+                const quantityDisplay = card.querySelector('.quantity');
+                let quantity = parseInt(quantityDisplay.textContent);
+                
+                quantity++;
+                quantityDisplay.textContent = quantity;
+                updateCartQuantity(card, quantity);
+            }
+        });
 
-    console.log('Produto removido:', productId);
-}
+        // Função para atualizar a quantidade no localStorage
+        function updateCartQuantity(card, quantity) {
+            const productId = parseInt(card.getAttribute('data-id'));
+            if (isNaN(productId)) {
+                console.error('ID do produto não encontrado ou inválido.');
+                return;
+            }
 
-      // Atualizar quantidade de produtos no carrinho
-const decrementButtons = document.querySelectorAll('.decrement');
-const incrementButtons = document.querySelectorAll('.increment');
+            const cartItem = cartItems.find(item => item.produtoId === productId);
+            if (cartItem) {
+                cartItem.quantidade = quantity;
+            }
 
-decrementButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        const card = button.closest('.promo-card');
-        const quantityDisplay = card.querySelector('.quantity');
-        let quantity = parseInt(quantityDisplay.textContent);
-
-        if (quantity > 1) {
-            quantity--;
-            quantityDisplay.textContent = quantity;
-            updateCartQuantity(card, quantity);
+            localStorage.setItem('cart', JSON.stringify(cartItems));
         }
-    });
-});
-
-incrementButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        const card = button.closest('.promo-card');
-        const quantityDisplay = card.querySelector('.quantity');
-        let quantity = parseInt(quantityDisplay.textContent);
-
-        quantity++;
-        quantityDisplay.textContent = quantity;
-        updateCartQuantity(card, quantity);
-    });
-});
-
-// Função para atualizar a quantidade no localStorage
-function updateCartQuantity(card, quantity) {
-    // Pegando o ID do produto diretamente do atributo 'data-id'
-    const productId = parseInt(card.getAttribute('data-id'));
-    console.log("Product ID:", productId);
-    
-    if (isNaN(productId)) {
-        console.error('ID do produto não encontrado ou inválido.');
-        return;
-    }
-
-    const cartItem = cartItems.find(item => item.produtoId === productId);
-    if (cartItem) {
-        cartItem.quantidade = quantity;
-    }
-
-    // Atualiza o localStorage com as novas informações do carrinho
-    localStorage.setItem('cart', JSON.stringify(cartItems));
-}
-
     </script>
 </body>
 </html>

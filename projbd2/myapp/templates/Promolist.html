@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerir Promoções</title>
+    <link rel="stylesheet" href="{% static 'css/promocoes.css' %}">
+</head>
+<body>
+    <header class="header">
+        <h1>Gerir Promoções</h1>
+        <a href="{% url 'home_page_login' %}" class="btn">Voltar</a>
+    </header>
+
+    <section class="promo-container">
+        <h2>Promoções Atuais</h2>
+        {% if promocoes %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th>Data Início</th>
+                    <th>Data Fim</th>
+                    <th>Desconto (%)</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for promo in promocoes %}
+                <tr>
+                    <td>{{ promo.id_produto.nome_produto }}</td>
+                    <td>{{ promo.data_inicio }}</td>
+                    <td>{{ promo.data_fim }}</td>
+                    <td>{{ promo.desconto }}%</td>
+                    <td>
+                        <a href="{% url 'editar_promocao' promo.id_promo %}" class="btn edit">Editar</a>
+                        <a href="{% url 'excluir_promocao' promo.id_promo %}" class="btn delete" onclick="return confirm('Tem certeza que deseja excluir esta promoção?');">Excluir</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>Não há promoções cadastradas.</p>
+        {% endif %}
+    </section>
+
+    <section class="nova-promocao">
+        <h2>Adicionar Nova Promoção</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <label>Produto:</label>
+            <select name="id_produto" required>
+                {% for produto in produtos %}
+                    <option value="{{ produto.id_produto }}">{{ produto.nome_produto }}</option>
+                {% endfor %}
+            </select>
+
+            <label>Data Início:</label>
+            <input type="date" name="data_inicio" required>
+
+            <label>Data Fim:</label>
+            <input type="date" name="data_fim" required>
+
+            <label>Desconto (%):</label>
+            <input type="number" name="desconto" step="0.01" min="0" max="100" required>
+
+            <button type="submit" class="btn">Criar Promoção</button>
+        </form>
+    </section>
+</body>
+</html>

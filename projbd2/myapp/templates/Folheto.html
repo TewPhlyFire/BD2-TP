@@ -1,4 +1,5 @@
 {% load static %}
+{% load custom_filters %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +14,6 @@
             <div class="buttonright">
                 <a class="customer-support" href="{% url 'log_out' %}">log out</a>
                 <a class="customer-support" href="{% url 'about_us' %}">About Us</a>
-                
             </div>
             <div class="logo">
                 <h1><a href="{% url 'home_page_login' %}">Mercado Machado</a></h1>
@@ -27,18 +27,33 @@
         </div>
     </header>
 
+    <h1>Promoções</h1>
+
     {% if promos %}
-    <section class="promo-section">
+    <div class="promo-container">
         {% for promo in promos %}
-        <div class="promo-card">
-            <div class="promo">
-                <h3>{{ promo.desconto }}%</h3>
-            </div>
-            <p>{{ promo.descricao }}</p>
-            <a href="{% url 'descobre_mais' promo.id_produto %}" class="promo-btn">Descrição</a>
-        </div>
+            {% for produto in produtos %}
+                {% if promo.id_produto.id_produto == produto.id_produto %}
+                    <div class="promo-card">
+                        <!-- Exibir imagem do MongoDB se existir -->
+                        {% if produto.id_produto in imagens_produtos %}
+                            <img src="data:image/png;base64,{{ imagens_produtos|dict_get:produto.id_produto }}" class="d-block mx-auto" alt="Promo Image">
+                        {% else %}
+                            <img src="{% static 'img/default.png' %}" class="d-block mx-auto" alt="Promo Image">
+                        {% endif %}
+
+                        <h3>{{ produto.nome_produto }}</h3>
+                        <p>
+                            <span class="original-price" style="text-decoration: line-through;">{{ produto.preco_original }}</span>
+                            <span class="discounted-price">{{ produto.preco }}</span>
+                            <span class="discount-percentage">-{{ promo.desconto }}%</span>
+                        </p>
+                        <a href="{% url 'descobre_mais' promo.id_produto.id_produto %}" class="btn btn-primary">Descrição</a>
+                    </div>
+                {% endif %}
+            {% endfor %}
         {% endfor %}
-    </section>
+    </div>
     {% else %}
     <p>No promotions available at the moment.</p>
     {% endif %}

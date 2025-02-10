@@ -74,39 +74,100 @@ body {
     cursor: pointer;
 }
 
-.promo-section {
-    background-color: black;
-    padding: 2rem;
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
+/* Estilização do corpo */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Container do folheto */
+.promo-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 colunas */
+    gap: 20px; /* Espaçamento entre os itens */
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Cartões de promoção */
 .promo-card {
     background-color: white;
-    color: black;
-    padding: 1rem;
-    margin: 1rem;
+    padding: 20px;
     border-radius: 10px;
-    width: 250px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-.promo{
-    color:red;
+    transition: transform 0.2s ease-in-out;
 }
 
+.promo-card:hover {
+    transform: scale(1.05); /* Efeito ao passar o mouse */
+}
+
+/* Imagens dos produtos */
 .promo-card img {
-    width: 100%;
-    border-radius: 10px;
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
 }
 
-.promo-btn {
-    background-color: #28a745;
+/* Nome do produto */
+.promo-card h3 {
+    margin-top: 10px;
+    font-size: 18px;
+    color: #333;
+}
+
+/* Preços */
+.promo-card .original-price {
+    color: red;
+    font-size: 14px;
+}
+
+.promo-card .discounted-price {
+    font-size: 20px;
+    font-weight: bold;
+    color: #27ae60;
+}
+
+.promo-card .discount-percentage {
+    font-size: 16px;
+}
+
+/* Botão de descrição */
+.promo-card .btn-primary {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: #007bff;
     color: white;
-    border: none;
-    padding: 0.5rem 1rem;
+    text-decoration: none;
     border-radius: 5px;
-    cursor: pointer;
-    margin-top: 1rem;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.promo-card .btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* Responsividade para telas menores */
+@media screen and (max-width: 1024px) {
+    .promo-container {
+        grid-template-columns: repeat(2, 1fr); /* 2 colunas */
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .promo-container {
+        grid-template-columns: repeat(1, 1fr); /* 1 coluna */
+    }
 }

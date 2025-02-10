@@ -69,7 +69,13 @@ class Produto(models.Model):
     preco = models.DecimalField(max_digits=5, decimal_places=2)
     id_subcategoria = models.ForeignKey(Categoria, models.DO_NOTHING, db_column='id_subcategoria', blank=True, null=True)
     quantidade = models.IntegerField(blank=True, null=True)
-
+    
+    def to_dict(self):
+        return {
+            'id_produto': self.id_produto,
+            'nome_produto': self.nome_produto,
+            'preco_produto': str(self.preco),  # Alterando para 'preco', o campo correto
+        }
     class Meta:
         managed = False
         db_table = 'produto'

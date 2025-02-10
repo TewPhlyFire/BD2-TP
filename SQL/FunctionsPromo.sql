@@ -1,36 +1,51 @@
-CREATE OR REPLACE FUNCTION aplicar_promocao()
+CREATE OR REPLACE FUNCTION atualizar_preco_produto()
 RETURNS TRIGGER AS $$
 BEGIN
-    IF NEW.Data_Inicio <= CURRENT_DATE AND NEW.Data_Fim >= CURRENT_DATE THEN
+    -- Verifica se o produto já tem preço original salvo
+    IF (SELECT COUNT(*) FROM Promo WHERE Id_Produto = NEW.Id_Produto AND Id_Promo != NEW.Id_Promo) = 0 THEN
+        -- Salva o preço original apenas se não houver promoções anteriores
         UPDATE Produto
-        SET preco_original = preco, 
-            preco = preco - (preco * NEW.Desconto / 100)
+        SET Preco_original = Preco
         WHERE Id_Produto = NEW.Id_Produto;
     END IF;
+
+    -- Atualiza o preço com desconto
+    UPDATE Produto
+    SET Preco = Preco_original * (1 - NEW.Desconto / 100)
+    WHERE Id_Produto = NEW.Id_Produto;
+
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trg_aplicar_promocao
+-- Criar o trigger que chama a função ao inserir ou atualizar promoções
+CREATE TRIGGER trg_atualizar_preco_produto
 AFTER INSERT OR UPDATE ON Promo
 FOR EACH ROW
-EXECUTE PROCEDURE aplicar_promocao();
+EXECUTE FUNCTION atualizar_preco_produto();
 
-CREATE OR REPLACE FUNCTION remover_promocao()
+CREATE OR REPLACE FUNCTION restaurar_preco_produto()
 RETURNS TRIGGER AS $$
+DECLARE
+    tem_outras_promocoes INT;
 BEGIN
-    IF NEW.Data_Fim < CURRENT_DATE THEN
+    -- Verifica se existem outras promoções ativas para o mesmo produto
+    SELECT COUNT(*) INTO tem_outras_promocoes FROM Promo WHERE Id_Produto = OLD.Id_Produto;
+
+    IF tem_outras_promocoes = 0 THEN
+        -- Restaura o preço original e zera o campo Preco_original
         UPDATE Produto
-        SET preco = preco_original,
-            preco_original = NULL
-        WHERE Id_Produto = NEW.Id_Produto;
+        SET Preco = Preco_original,
+            Preco_original = 0
+        WHERE Id_Produto = OLD.Id_Produto;
     END IF;
-    RETURN NEW;
+
+    RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trg_remover_promocao
-AFTER UPDATE ON Promo
+-- Criar o trigger que chama a função ao deletar promoções
+CREATE TRIGGER trg_restaurar_preco_produto
+AFTER DELETE ON Promo
 FOR EACH ROW
-WHEN (NEW.Data_Fim < CURRENT_DATE)
-EXECUTE PROCEDURE remover_promocao();
+EXECUTE FUNCTION restaurar_preco_produto();
