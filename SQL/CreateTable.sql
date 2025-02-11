@@ -33,7 +33,6 @@ CREATE TABLE Categoria
     CONSTRAINT FK_SubCat FOREIGN KEY (Id_subcategoria) REFERENCES Categoria (Id_Categoria)
 );
 
- /*
 CREATE TABLE Produto 
 ( 
     Id_Produto              SERIAL              PRIMARY KEY      NOT NULL, 
@@ -45,7 +44,7 @@ CREATE TABLE Produto
     Quantidade              INT              DEFAULT 0, 
     
     CONSTRAINT FK_Produto_Categoria FOREIGN KEY (Id_subcategoria) REFERENCES Categoria (Id_Categoria)
-);*/
+);
 
 CREATE TABLE Promo
 (
@@ -58,6 +57,7 @@ CREATE TABLE Promo
     CONSTRAINT FK_Promo_Produto FOREIGN KEY (Id_Produto) REFERENCES Produto (Id_Produto)
 );
 
+/*
 CREATE TABLE Pedido
 (
     Id_Pedido       SERIAL              PRIMARY KEY     NOT NULL,
@@ -71,4 +71,4 @@ CREATE TABLE Pedido
     CONSTRAINT FK_Pedido_Produto     FOREIGN KEY (Id_Produto)     REFERENCES Produto (Id_Produto),
     CONSTRAINT FK_Pedido_Cliente     FOREIGN KEY (NIF_Cliente)    REFERENCES Cliente (NIF_Cliente),
     CONSTRAINT FK_Pedido_Funcionario FOREIGN KEY (Id_Funcionario) REFERENCES Funcionario (Id_Funcionario)
-);
+);*/

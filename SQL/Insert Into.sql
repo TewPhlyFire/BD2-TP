@@ -22,7 +22,6 @@ VALUES
 (2, 'Alimentos'),
 (3, 'Vestuário');
 
-/*
 -- Inserir na tabela Produto
 INSERT INTO Produto (Nome_Produto, Descricao, Preco_original, Preco, Id_subcategoria, Quantidade)
 VALUES
@@ -30,7 +29,7 @@ VALUES
 ('Sofá', 'Sofá de 3 lugares', 300.00, 300.00, 2, 5),
 ('Arroz', 'Pacote de arroz 5kg', 10.00, 10.00, 3, 50),
 ('Camiseta', 'Camiseta de algodão', 25.00, 25.00, 4, 20);
-*/
+
 
 -- Inserir na tabela Promo
 INSERT INTO Promo (Id_Produto, Data_Inicio, Data_Fim, Desconto)
@@ -40,6 +39,7 @@ VALUES
 (3, '2025-02-01', '2025-02-28', 5.00),
 (4, '2025-02-01', '2025-02-28', 20.00);
 
+/*
 -- Inserir na tabela Pedido
 INSERT INTO Pedido (Id_Produto, Quantidade, NIF_Cliente, Id_Funcionario)
 VALUES
@@ -47,3 +47,4 @@ VALUES
 (2, 1, 987654321, 2),
 (3, 5, 112233445, 3),
 (4, 3, 998877665, 4);
+*/
