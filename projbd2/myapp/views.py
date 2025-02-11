@@ -235,9 +235,8 @@ def folheto(request):
             'imagens_produtos': imagens_produtos  # Passamos o dicionário para o template
         }
     )
-    
 
-    # View para a página 'HomePageLogin'
+# View para a página 'HomePageLogin'
 def home_page_login(request):
     promos = Promo.objects.all()
     produtos = Produto.objects.all()
@@ -260,6 +259,7 @@ def home_page_login(request):
             'imagens_produtos': imagens_produtos  # Passamos o dicionário para o template
         }
     )
+
 # View para a página 'UserPage'
 def UserPage(request, nif_cliente):
     with connection.cursor() as cursor:
@@ -279,7 +279,6 @@ def UserPage(request, nif_cliente):
         cliente = None  # Se não encontrar o cliente, evita erro
 
     return render(request, 'UserPage.html', {'cliente': cliente})
-
 
 # Editar perfil
 def editar_perfil(request, nif_cliente):
@@ -351,7 +350,6 @@ def login_admin(request):
 
     return render(request, 'login_admin.html')
 
-
 def registar(request):
     if request.method == "POST":
         form = RegistroForm(request.POST)
@@ -363,11 +361,6 @@ def registar(request):
         form = RegistroForm()
 
     return render(request, 'register.html', {'form': form})
-
-
-
-
-
 
 def listar_promocoes(request):
     # Buscar promoções existentes
@@ -394,7 +387,6 @@ def listar_promocoes(request):
 
     return render(request, "Promolist.html", {"promocoes": promocoes, "produtos": produtos})
 
-
 def editar_promocao(request, promo_id):
     promocao = get_object_or_404(Promo, id_promo=promo_id)
     produtos = Produto.objects.all()
@@ -419,7 +411,6 @@ def editar_promocao(request, promo_id):
         return redirect("listar_promocoes")
 
     return render(request, "editar_promocao.html", {"promocao": promocao, "produtos": produtos})
-
 
 def excluir_promocao(request, promo_id):
     with connection.cursor() as cursor:

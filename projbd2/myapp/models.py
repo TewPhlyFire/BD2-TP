@@ -31,11 +31,6 @@ class Cliente(models.Model):
         db_table = 'cliente'
 
 
-
-
-
-
-
 class Funcionario(models.Model):
     id_funcionario = models.AutoField(primary_key=True)
     pnome_funcionario = models.CharField(max_length=10)
@@ -86,12 +81,14 @@ class ProdutoImagem(me.Document):
 
     meta = {'collection': 'Images'}  # Define a coleção no MongoDB
 
+
 class ProdutoVenda(me.EmbeddedDocument):
     produto_id = me.StringField(required=True)
     nome_produto = me.StringField(required=True)
     quantidade = me.IntField(required=True, min_value=1)
     valor_unitario = me.FloatField(required=True, min_value=0.0)
     valor_total = me.FloatField(required=True, min_value=0.0)
+
 
 class Venda(me.Document):
     produtos = me.EmbeddedDocumentListField(ProdutoVenda)
