@@ -1,16 +1,10 @@
---Trigger de atualização de Saldo de Caixa e de Quantidade de Produto no ato de inserção de Pedido
-CREATE TRIGGER AtualizaCaixaEProduto
+--Trigger de atualização de Quantidade de Produto no ato de inserção de Pedido
+CREATE TRIGGER AtualizaStockEProduto
 ON Pedido
 AFTER INSERT
 AS
 BEGIN
-    -- Atualizar o saldo da caixa com base no total do pedido
-    UPDATE Caixa
-    SET Saldo = Saldo + Inserted.Total
-    FROM Caixa
-    INNER JOIN Inserted ON Caixa.Id_Caixa = Inserted.Id_Caixa;
-
-    -- Atualizar a quantidade do produto com base na quantidade do pedido
+       -- Atualizar a quantidade do produto com base na quantidade do pedido
     UPDATE Produto
     SET Quantidade = Quantidade - Inserted.Quantidade
     FROM Produto
