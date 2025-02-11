@@ -33,24 +33,22 @@ Antes de começar, certifique-se de ter os seguintes requisitos instalados:
    - Para a Base de Dados em MongoDB, os scripts necessários estão na pasta MongoDB-JSON
    - Após o uso dos scripts modifique os dados de conexão que se encontram na pasta `settings.py`, dentro do dirétorio `projbd2/projbd2/`:
      ```
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'postgres',
-            'USER': 'postgres',
-            'PASSWORD': '1234',
-            'HOST': 'localhost',  # ou o endereço do servidor
-            'PORT': '5432',       # porta padrão do PostgreSQL
-        }
-    }
+     DATABASES = {
+         'default': {
+             'ENGINE': 'django.db.backends.postgresql',
+             'NAME': 'postgres',
+             'USER': 'postgres',
+             'PASSWORD': '1234',
+             'HOST': 'localhost',  # ou o endereço do servidor
+             'PORT': '5432',       # porta padrão do PostgreSQL
+         }
+     }
 
-    connect(
-        db="BDII",
-        host="localhost",
-        port=27017,
-    )
-
-
+     connect(
+         db="BDII",
+         host="localhost",
+         port=27017,
+     )
      ```
    - Aplicar migrações:
      ```sh
