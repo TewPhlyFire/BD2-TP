@@ -47,20 +47,6 @@ class Funcionario(models.Model):
         db_table = 'funcionario'
 
 
-class Pedido(models.Model):
-    id_pedido = models.AutoField(primary_key=True)
-    id_produto = models.ForeignKey('Produto', models.DO_NOTHING, db_column='id_produto')
-    data_hora = models.DateTimeField()
-    quantidade = models.IntegerField()
-    total = models.DecimalField(max_digits=5, decimal_places=2)
-    nif_cliente = models.ForeignKey(Cliente, models.DO_NOTHING, db_column='nif_cliente', blank=True, null=True)
-    id_funcionario = models.ForeignKey(Funcionario, models.DO_NOTHING, db_column='id_funcionario', blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'pedido'
-
-
 class Produto(models.Model):
     id_produto = models.AutoField(primary_key=True)
     nome_produto = models.CharField(max_length=100)

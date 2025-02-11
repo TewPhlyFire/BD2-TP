@@ -10,9 +10,14 @@
 <body>
     <header class="header">
         <div class="container">
-           
+            
+            <div class="buttonright">
+                <a id="user-link" class="customer-support" href="{% url 'home_page_login' %}">
+                    Log Out
+                </a>
+            </div>
+
             <div class="logo">
-             
                 <h1><a>Mercado Machado</a></h1>
             </div>
             
@@ -26,6 +31,9 @@
             </a>
             <a href="{% url 'listar_promocoes' %}">
                 <button class="promo-button">Gerir Promoções</button>
+            </a>
+            <a href="{% url 'vendas_por_mes' %}">
+                <button class="promo-button">Histórico Vendas</button>
             </a>
         </div>
 

@@ -1,55 +1,51 @@
-[
-    {
-        "produtos": [
-            {
-                "produto_id": "123",
-                "nome_produto": "Camiseta Preta",
-                "quantidade": 2,
-                "valor_unitario": 20.00,
-                "valor_total": 40.00
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Venda",
+    "type": "object",
+    "properties": {
+      "produtos": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "produto_id": {
+              "type": "string",
+              "description": "ID do produto"
             },
-            {
-                "produto_id": "456",
-                "nome_produto": "Boné Azul",
-                "quantidade": 1,
-                "valor_unitario": 15.00,
-                "valor_total": 15.00
-            }
-        ],
-        "data_venda": "2024-02-11T14:30:00Z",
-        "valor_total_venda": 55.00
-    },
-    {
-        "produtos": [
-            {
-                "produto_id": "789",
-                "nome_produto": "Tênis Esportivo",
-                "quantidade": 1,
-                "valor_unitario": 150.00,
-                "valor_total": 150.00
+            "nome_produto": {
+              "type": "string",
+              "description": "Nome do produto"
             },
-            {
-                "produto_id": "101",
-                "nome_produto": "Meias Brancas",
-                "quantidade": 3,
-                "valor_unitario": 5.00,
-                "valor_total": 15.00
+            "quantidade": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Quantidade do produto na venda"
+            },
+            "valor_unitario": {
+              "type": "number",
+              "minimum": 0.0,
+              "description": "Preço unitário do produto"
+            },
+            "valor_total": {
+              "type": "number",
+              "minimum": 0.0,
+              "description": "Preço total do produto (quantidade * valor_unitario)"
             }
-        ],
-        "data_venda": "2024-02-10T10:00:00Z",
-        "valor_total_venda": 165.00
+          },
+          "required": ["produto_id", "nome_produto", "quantidade", "valor_unitario", "valor_total"]
+        }
+      },
+      "data_venda": {
+        "type": "string",
+        "format": "date-time",
+        "description": "Data e hora da venda"
+      },
+      "valor_total_venda": {
+        "type": "number",
+        "minimum": 0.0,
+        "description": "Valor total da venda"
+      }
     },
-    {
-        "produtos": [
-            {
-                "produto_id": "202",
-                "nome_produto": "Relógio Digital",
-                "quantidade": 1,
-                "valor_unitario": 250.00,
-                "valor_total": 250.00
-            }
-        ],
-        "data_venda": "2024-02-09T16:45:00Z",
-        "valor_total_venda": 250.00
-    }
-]
+    "required": ["produtos", "data_venda", "valor_total_venda"]
+  }
+  
