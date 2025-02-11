@@ -92,11 +92,24 @@ class Promo(models.Model):
         managed = False
         db_table = 'promo'
 
-from mongoengine import Document, StringField, BinaryField, IntField
+import mongoengine as me
 
-class ProdutoImagem(Document):
-    imagens = BinaryField(required=True)  # Para armazenar a imagem em formato binário
-    id_prodref = IntField(required=True)  # ID de referência do produto no PostgreSQL
+class ProdutoImagem(me.Document):
+    imagens = me.BinaryField(required=True)  # Para armazenar a imagem em formato binário
+    id_prodref = me.IntField(required=True)  # ID de referência do produto no PostgreSQL
 
-    meta = {'collection': 'Images'}  # Substitua pelo nome real da coleção no MongoDB
+    meta = {'collection': 'Images'}  # Define a coleção no MongoDB
 
+class ProdutoVenda(me.EmbeddedDocument):
+    produto_id = me.StringField(required=True)
+    nome_produto = me.StringField(required=True)
+    quantidade = me.IntField(required=True, min_value=1)
+    valor_unitario = me.FloatField(required=True, min_value=0.0)
+    valor_total = me.FloatField(required=True, min_value=0.0)
+
+class Venda(me.Document):
+    produtos = me.EmbeddedDocumentListField(ProdutoVenda)
+    data_venda = me.DateTimeField(required=True)
+    valor_total_venda = me.FloatField(required=True, min_value=0.0)
+
+    meta = {"collection": "vendas"}  # Define a coleção no MongoDB

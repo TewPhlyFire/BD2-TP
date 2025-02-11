@@ -1,10 +1,11 @@
 
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Produto, Categoria, Cliente, Promo, ProdutoImagem
+from .models import Produto, Categoria, Cliente, Promo, ProdutoImagem, Venda, ProdutoVenda
 from django.db import connection
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from .forms import RegistroForm
+from datetime import datetime
 import json
 import base64
 
@@ -86,23 +87,67 @@ def cesto(request):
 
 @csrf_exempt
 def finalizar_compra(request):
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            # Aqui você pode processar os dados da compra
-            itens = data.get('itens', [])
-            morada = data.get('morada', '')
-            nif = data.get('nif', '')
+    if request.method == "POST":
+        data = json.loads(request.body)
+        print(data)  # Para depuração, você pode verificar a estrutura dos dados recebidos
 
-            # Lógica de processamento da compra
-            # Exemplo de atualização do estoque e salvar a compra, etc.
+        # O corpo da requisição deve conter um array de objetos de produto
+        itens_carrinho = data.get("itens", [])
 
-            return JsonResponse({'success': True})
+        if not itens_carrinho:
+            return JsonResponse({"success": False, "message": "Carrinho vazio!"}, status=400)
 
-        except Exception as e:
-            return JsonResponse({'success': False, 'error': str(e)})
-    else:
-        return JsonResponse({'success': False, 'error': 'Método não permitido'}, status=405)
+        # Lista para armazenar os produtos da venda
+        produtos_venda = []
+        valor_total_venda = 0
+
+        # Processar cada item do carrinho
+        for item in itens_carrinho:
+            produto_id = item.get("produto_id")
+            quantidade = item.get("quantidade")
+
+            if produto_id is None or quantidade is None:
+                return JsonResponse({"success": False, "message": "Dados incompletos para um produto."}, status=400)
+
+            try:
+                produto = Produto.objects.get(id_produto=produto_id)
+                if produto.quantidade >= quantidade:
+                    produto.quantidade -= quantidade
+                    produto.save()
+
+                    # Calcular o valor total para o produto
+                    valor_unitario = produto.preco  # Supondo que o campo 'preco' exista no modelo Produto
+                    valor_total = valor_unitario * quantidade
+
+                    # Criar o objeto ProdutoVenda
+                    produto_venda = ProdutoVenda(
+                        produto_id=str(produto.id_produto),
+                        nome_produto=produto.nome_produto,
+                        quantidade=quantidade,
+                        valor_unitario=valor_unitario,
+                        valor_total=valor_total
+                    )
+                    produtos_venda.append(produto_venda)
+                    valor_total_venda += valor_total
+
+                else:
+                    return JsonResponse({"success": False, "message": f"Estoque insuficiente para o produto {produto.nome_produto}!"}, status=400)
+
+            except Produto.DoesNotExist:
+                return JsonResponse({"success": False, "message": f"Produto com ID {produto_id} não encontrado!"}, status=404)
+
+        # Criar o objeto Venda com todos os produtos
+        venda = Venda(
+            produtos=produtos_venda,
+            data_venda=datetime.now(),
+            valor_total_venda=valor_total_venda
+        )
+        venda.save()
+
+        # Após processar todos os itens com sucesso e salvar a venda
+        return JsonResponse({"success": True, "message": "Compra realizada com sucesso!"})
+
+    return JsonResponse({"success": False, "message": "Método inválido!"}, status=400)
 
 # View para a página 'DescobreMais'
 def descobre_mais(request, produto_id):
@@ -382,3 +427,19 @@ def excluir_promocao(request, promo_id):
 
     return redirect("listar_promocoes")
 
+def vendas_por_mes(request):
+    vendas = Venda.objects.all().order_by('-data_venda')
+
+    # Agrupar vendas por ano-mês e calcular o total por mês
+    vendas_mensais = {}
+
+    for venda in vendas:
+        mes_ano = venda.data_venda.strftime('%Y-%m')  # Exemplo: "2024-02"
+        
+        if mes_ano not in vendas_mensais:
+            vendas_mensais[mes_ano] = {"vendas": [], "total_mes": 0}
+        
+        vendas_mensais[mes_ano]["vendas"].append(venda)
+        vendas_mensais[mes_ano]["total_mes"] += venda.valor_total_venda
+
+    return render(request, 'vendas_mes.html', {'vendas_mensais': vendas_mensais})

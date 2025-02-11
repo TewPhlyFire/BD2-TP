@@ -1,0 +1,55 @@
+[
+    {
+        "produtos": [
+            {
+                "produto_id": "123",
+                "nome_produto": "Camiseta Preta",
+                "quantidade": 2,
+                "valor_unitario": 20.00,
+                "valor_total": 40.00
+            },
+            {
+                "produto_id": "456",
+                "nome_produto": "Boné Azul",
+                "quantidade": 1,
+                "valor_unitario": 15.00,
+                "valor_total": 15.00
+            }
+        ],
+        "data_venda": "2024-02-11T14:30:00Z",
+        "valor_total_venda": 55.00
+    },
+    {
+        "produtos": [
+            {
+                "produto_id": "789",
+                "nome_produto": "Tênis Esportivo",
+                "quantidade": 1,
+                "valor_unitario": 150.00,
+                "valor_total": 150.00
+            },
+            {
+                "produto_id": "101",
+                "nome_produto": "Meias Brancas",
+                "quantidade": 3,
+                "valor_unitario": 5.00,
+                "valor_total": 15.00
+            }
+        ],
+        "data_venda": "2024-02-10T10:00:00Z",
+        "valor_total_venda": 165.00
+    },
+    {
+        "produtos": [
+            {
+                "produto_id": "202",
+                "nome_produto": "Relógio Digital",
+                "quantidade": 1,
+                "valor_unitario": 250.00,
+                "valor_total": 250.00
+            }
+        ],
+        "data_venda": "2024-02-09T16:45:00Z",
+        "valor_total_venda": 250.00
+    }
+]

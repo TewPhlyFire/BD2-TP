@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendas por Mês</title>
+    <style>
+        .mes-container {
+            margin-bottom: 10px;
+        }
+
+        .mes-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+        }
+
+        .mes-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .vendas-lista {
+            background: #f8f9fa;
+            padding: 10px;
+            border-left: 3px solid #007bff;
+        }
+    </style>
+</head>
+<body>
+    <h2>Vendas por Mês</h2>
+
+    {% for mes, dados in vendas_mensais.items %}
+        <div class="mes-container">
+            <button class="mes-btn" onclick="toggleVendas('{{ mes }}')">
+                {{ mes }} - Total: €{{ dados.total_mes|floatformat:2 }}
+            </button>
+            <div id="vendas-{{ mes }}" class="vendas-lista" style="display: none;">
+                <ul>
+                    {% for venda in dados.vendas %}
+                        <li>
+                            <strong>Data:</strong> {{ venda.data_venda|date:"d/m/Y H:i" }}<br>
+                            <strong>Total da Venda:</strong> €{{ venda.valor_total_venda|floatformat:2 }}
+                            <ul>
+                                {% for produto in venda.produtos %}
+                                    <li>
+                                        {{ produto.nome_produto }} - {{ produto.quantidade }} x €{{ produto.valor_unitario|floatformat:2 }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% empty %}
+        <p>Nenhuma venda registrada.</p>
+    {% endfor %}
+
+    <script>
+        function toggleVendas(mes) {
+            var lista = document.getElementById("vendas-" + mes);
+            lista.style.display = (lista.style.display === "none") ? "block" : "none";
+        }
+    </script>
+</body>
+</html>

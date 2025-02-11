@@ -21,6 +21,7 @@ urlpatterns = [
     path("promocoes/editar/<int:promo_id>/", views.editar_promocao, name="editar_promocao"),
     path("promocoes/excluir/<int:promo_id>/", views.excluir_promocao, name="excluir_promocao"),
     path('finalizar-compra/', views.finalizar_compra, name='finalizar_compra'),
+    path('vendas/', views.vendas_por_mes, name='vendas_por_mes'),
 
 ]
 

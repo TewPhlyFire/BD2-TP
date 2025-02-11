@@ -34,6 +34,7 @@
     <section class="promo-section"></section>
 
     <style>
+        /* Estilo para o pop-up */
         .popup {
             position: fixed;
             top: 50%;
@@ -42,10 +43,10 @@
             background: white;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            display: none; /* Esconde o pop-up por padrão */
-            z-index: 1000; /* Garante que o pop-up fique acima de outros elementos */
+            display: none;
+            z-index: 1000;
             opacity: 0;
-            transition: opacity 0.3s ease-in-out; /* Transição suave */
+            transition: opacity 0.3s ease-in-out;
         }
         .popup.show {
             display: block;
@@ -57,26 +58,12 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5); /* Fundo escurecido para o pop-up */
-            z-index: 999; /* Garante que o fundo fique atrás do pop-up */
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
             display: none;
         }
         .overlay.show {
             display: block;
-        }
-        .popup-content {
-            display: block;
-        }
-        .buy-all-button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        .buy-all-button:hover {
-            background-color: #218838;
         }
     </style>
     
@@ -104,11 +91,11 @@
             if (user && user.nif) {
                 document.getElementById("user-link").href = `/UserPage/${user.nif}/`;
             }
-    
+
             const produtos = JSON.parse('{{ produtos|safe }}');
             const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
             const promoSection = document.querySelector('.promo-section');
-    
+
             // Mostrar os itens no carrinho
             cartItems.forEach(product => {
                 const productCard = document.createElement('div');
@@ -117,9 +104,9 @@
                 const produto = produtos.find(p => p.id_produto === product.produtoId);
                 if (produto) {
                     const quantity = product.quantidade;
-                    const maxStock = produto.stock; // Limitação do stock
+                    const maxStock = produto.stock;
                     productCard.setAttribute('data-id', produto.id_produto);
-    
+
                     const imageUrl = produto.imagem ? `data:image/png;base64,${produto.imagem}` : "{% static 'img/default.png' %}";
     
                     productCard.innerHTML = `
@@ -142,11 +129,11 @@
                     cancelButton.addEventListener('click', () => {
                         removeProductFromCart(product.produtoId, productCard);
                     });
-    
+
                     const decrementButton = productCard.querySelector('.decrement');
                     const incrementButton = productCard.querySelector('.increment');
                     const quantityDisplay = productCard.querySelector('.quantity');
-    
+
                     decrementButton.addEventListener('click', () => {
                         let quantity = parseInt(quantityDisplay.textContent);
                         if (quantity > 1) {
@@ -155,37 +142,35 @@
                             updateCartQuantity(product.produtoId, quantity);
                         }
                     });
-    
+
                     incrementButton.addEventListener('click', () => {
                         let quantity = parseInt(quantityDisplay.textContent);
-                        if (quantity < maxStock) { // Limitação do stock
+                        if (quantity < maxStock) {
                             quantity++;
                             quantityDisplay.textContent = quantity;
                             updateCartQuantity(product.produtoId, quantity);
                         }
                     });
-    
+
                     promoSection.appendChild(productCard);
                 }
             });
-    
-            // Exibir o botão "Comprar Tudo"
+
             const buyAllButton = document.createElement('button');
             buyAllButton.textContent = 'Comprar Tudo';
             buyAllButton.classList.add('buy-all-button');
             promoSection.appendChild(buyAllButton);
-    
+
             buyAllButton.addEventListener('click', () => {
-                console.log('Botão "Comprar Tudo" clicado');
                 openPurchasePopup();
             });
-    
+
             function removeProductFromCart(productId, productCard) {
                 const updatedCartItems = cartItems.filter(item => item.produtoId !== productId);
                 localStorage.setItem('cart', JSON.stringify(updatedCartItems));
                 promoSection.removeChild(productCard);
             }
-    
+
             function updateCartQuantity(productId, quantity) {
                 const cartItem = cartItems.find(item => item.produtoId === productId);
                 if (cartItem) {
@@ -193,68 +178,66 @@
                 }
                 localStorage.setItem('cart', JSON.stringify(cartItems));
             }
-    
+
             function openPurchasePopup() {
-                console.log('Abrindo o pop-up de compra...');
                 const popup = document.getElementById('purchase-popup');
                 const overlay = document.getElementById('overlay');
                 const form = document.getElementById('purchase-form');
                 const addressInput = document.getElementById('address');
                 const nifInput = document.getElementById('nif');
-    
+
                 if (user) {
                     addressInput.value = user.morada || "";
                     nifInput.value = user.nif || "";
                 }
-    
-                // Mostrar o pop-up e o overlay com animação
+
                 popup.classList.add('show');
                 overlay.classList.add('show');
-    
+
                 form.onsubmit = function (event) {
                     event.preventDefault();
                     completePurchase();
                 };
-    
+
                 document.getElementById('close-popup').addEventListener('click', () => {
                     popup.classList.remove('show');
                     overlay.classList.remove('show');
                 });
             }
-    
+
             function completePurchase() {
                 const cartItemsData = cartItems.map(item => ({
                     produto_id: item.produtoId,
                     quantidade: item.quantidade
                 }));
-    
+
                 fetch('/finalizar-compra/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRFToken': '{{ csrf_token }}'
+                        'X-CSRFToken': '{{ csrf_token }}'  // Envia o CSRF token
                     },
                     body: JSON.stringify({
-                        itens: cartItemsData,
+                        itens: cartItemsData,  // Envia o array de itens
                         morada: document.getElementById('address').value,
                         nif: document.getElementById('nif').value
                     })
-                }).then(response => response.json())
+                })
+                .then(response => response.json())
                 .then(data => {
                     if (data.success) {
                         alert('Compra realizada com sucesso!');
-                        localStorage.removeItem('cart');  // Limpar o carrinho após a compra
+                        localStorage.removeItem('cart');  
                         document.getElementById('purchase-popup').classList.remove('show');
                         document.getElementById('overlay').classList.remove('show');
                         location.reload();
                     } else {
-                        alert('Erro na compra: ' + data.error);
+                        alert('Erro na compra: ' + data.message);
                     }
-                }).catch(error => console.error('Erro:', error));
+                })
+                .catch(error => console.error('Erro:', error));
             }
         });
     </script>
-
-    
 </body>
 </html>
