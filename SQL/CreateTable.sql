@@ -57,18 +57,3 @@ CREATE TABLE Promo
     CONSTRAINT FK_Promo_Produto FOREIGN KEY (Id_Produto) REFERENCES Produto (Id_Produto)
 );
 
-/*
-CREATE TABLE Pedido
-(
-    Id_Pedido       SERIAL              PRIMARY KEY     NOT NULL,
-    Id_Produto      INT                 NOT NULL,
-    Data_Hora       TIMESTAMP           DEFAULT CURRENT_TIMESTAMP   NOT NULL,
-    Quantidade      INT                 DEFAULT 1       NOT NULL,
-    Total           DECIMAL(5,2)        DEFAULT 0.00    NOT NULL,
-    NIF_Cliente     INT,
-    Id_Funcionario  INT,
-
-    CONSTRAINT FK_Pedido_Produto     FOREIGN KEY (Id_Produto)     REFERENCES Produto (Id_Produto),
-    CONSTRAINT FK_Pedido_Cliente     FOREIGN KEY (NIF_Cliente)    REFERENCES Cliente (NIF_Cliente),
-    CONSTRAINT FK_Pedido_Funcionario FOREIGN KEY (Id_Funcionario) REFERENCES Funcionario (Id_Funcionario)
-);*/
