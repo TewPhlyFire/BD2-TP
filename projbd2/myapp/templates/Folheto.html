@@ -7,12 +7,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mercado Machado</title>
     <link rel="stylesheet" href="{% static 'css/Folheto.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
+
 </head>
 <body>
     <header class="header">
         <div class="container">
             <div class="buttonright">
-                <a class="customer-support" href="{% url 'log_out' %}">log out</a>
+                <a id="user-link" class="customer-support" href="{% url 'log_out' %}">
+                    <i class="fas fa-user"></i> <!-- Ícone de usuário -->
+                </a>
                 <a class="customer-support" href="{% url 'about_us' %}">About Us</a>
             </div>
             <div class="logo">
@@ -26,6 +30,16 @@
             </div>
         </div>
     </header>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const user = JSON.parse(localStorage.getItem("user"));
+    
+            if (user && user.nif) {
+                // Atualiza o link para redirecionar para outra rota
+                document.getElementById("user-link").href = `/UserPage/${user.nif}/`;
+            }
+        });
+    </script>
 
     <h1>Promoções</h1>
 

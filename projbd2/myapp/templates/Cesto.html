@@ -6,13 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mercado Machado</title>
     <link rel="stylesheet" href="{% static 'css/Cesto.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
 </head>
-
 <body>
+    
     <header class="header">
         <div class="container">
             <div class="buttonright">
-                <a class="customer-support" href="{% url 'log_out' %}">log out</a>
+                <a id="user-link" class="customer-support" href="{% url 'log_out' %}">
+                    <i class="fas fa-user"></i>
+                </a>
                 <a class="customer-support" href="{% url 'about_us' %}">About Us</a>
             </div>
             <div class="logo">
@@ -28,109 +31,230 @@
     </header>
 
     <h1>Carrinho de Compras</h1>
+    <section class="promo-section"></section>
 
-    <section class="promo-section">
-        <!-- Os produtos serão inseridos dinamicamente -->
-    </section>
-
+    <style>
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            display: none; /* Esconde o pop-up por padrão */
+            z-index: 1000; /* Garante que o pop-up fique acima de outros elementos */
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out; /* Transição suave */
+        }
+        .popup.show {
+            display: block;
+            opacity: 1;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Fundo escurecido para o pop-up */
+            z-index: 999; /* Garante que o fundo fique atrás do pop-up */
+            display: none;
+        }
+        .overlay.show {
+            display: block;
+        }
+        .popup-content {
+            display: block;
+        }
+        .buy-all-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .buy-all-button:hover {
+            background-color: #218838;
+        }
+    </style>
+    
+    <!-- Overlay e pop-up de compra -->
+    <div id="overlay" class="overlay"></div>
+    <div id="purchase-popup" class="popup">
+        <div class="popup-content">
+            <h2>Finalizar Compra</h2>
+            <form id="purchase-form">
+                <label for="address">Morada:</label>
+                <input type="text" id="address" name="address" required>
+    
+                <label for="nif">NIF:</label>
+                <input type="text" id="nif" name="nif" required>
+    
+                <button type="submit">Confirmar Compra</button>
+                <button type="button" id="close-popup">Cancelar</button>
+            </form>
+        </div>
+    </div>
+    
     <script>
-        // Passa os produtos do Django para JavaScript
-        const produtos = JSON.parse('{{ produtos|safe }}');  
-        console.log("Produtos disponíveis:", produtos);
-
-        // Obter os itens do carrinho do localStorage
-        const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
-        console.log("Itens no carrinho:", cartItems);
-        const promoSection = document.querySelector('.promo-section');
-
-        cartItems.forEach(product => {
-            const productCard = document.createElement('div');
-            productCard.classList.add('promo-card');
-
-            // Encontrar o produto na lista de produtos
-            const produto = produtos.find(p => p.id_produto === product.produtoId);
-            
-            if (produto) {
-                const quantity = product.quantidade;
-                productCard.setAttribute('data-id', produto.id_produto);
-
-                // Verifica se há uma imagem no MongoDB, senão usa uma padrão
-                const imageUrl = produto.imagem ? `data:image/png;base64,${produto.imagem}` : "{% static 'img/default.png' %}";
-
-                productCard.innerHTML = `
-                    <img src="${imageUrl}" alt="Imagem do Produto" style="max-width: 150px;">
-                    <div class="card-content">
-                        <h3>${produto.nome_produto}</h3>
-                        <p>${produto.preco_produto}$</p>
-                        <div class="juntos">
-                            <button class="cancel-button">Remover</button>
-                            <div>
-                                <button class="decrement">-</button>
-                                <span class="quantity">${quantity}</span>
-                                <button class="increment">+</button>
+        document.addEventListener("DOMContentLoaded", function () {
+            const user = JSON.parse(localStorage.getItem("user"));
+            if (user && user.nif) {
+                document.getElementById("user-link").href = `/UserPage/${user.nif}/`;
+            }
+    
+            const produtos = JSON.parse('{{ produtos|safe }}');
+            const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+            const promoSection = document.querySelector('.promo-section');
+    
+            // Mostrar os itens no carrinho
+            cartItems.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.classList.add('promo-card');
+    
+                const produto = produtos.find(p => p.id_produto === product.produtoId);
+                if (produto) {
+                    const quantity = product.quantidade;
+                    const maxStock = produto.stock; // Limitação do stock
+                    productCard.setAttribute('data-id', produto.id_produto);
+    
+                    const imageUrl = produto.imagem ? `data:image/png;base64,${produto.imagem}` : "{% static 'img/default.png' %}";
+    
+                    productCard.innerHTML = `
+                        <img src="${imageUrl}" alt="Imagem do Produto" style="max-width: 150px;">
+                        <div class="card-content">
+                            <h3>${produto.nome_produto}</h3>
+                            <p>${produto.preco_produto}$</p>
+                            <div class="juntos">
+                                <button class="cancel-button">Remover</button>
+                                <div>
+                                    <button class="decrement">-</button>
+                                    <span class="quantity">${quantity}</span>
+                                    <button class="increment">+</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                `;
-
-                // Adicionar funcionalidade ao botão de remover
-                const cancelButton = productCard.querySelector('.cancel-button');
-                cancelButton.addEventListener('click', () => {
-                    removeProductFromCart(product.produtoId, productCard);
-                });
-
-                promoSection.appendChild(productCard);
-            }
-        });
-
-        // Função para remover produto do carrinho
-        function removeProductFromCart(productId, productCard) {
-            const updatedCartItems = cartItems.filter(item => item.produtoId !== productId);
-            localStorage.setItem('cart', JSON.stringify(updatedCartItems));
-            promoSection.removeChild(productCard);
-            console.log('Produto removido:', productId);
-        }
-
-        // Atualizar quantidade de produtos no carrinho
-        document.addEventListener('click', function(event) {
-            if (event.target.classList.contains('decrement')) {
-                const card = event.target.closest('.promo-card');
-                const quantityDisplay = card.querySelector('.quantity');
-                let quantity = parseInt(quantityDisplay.textContent);
-
-                if (quantity > 1) {
-                    quantity--;
-                    quantityDisplay.textContent = quantity;
-                    updateCartQuantity(card, quantity);
+                    `;
+    
+                    const cancelButton = productCard.querySelector('.cancel-button');
+                    cancelButton.addEventListener('click', () => {
+                        removeProductFromCart(product.produtoId, productCard);
+                    });
+    
+                    const decrementButton = productCard.querySelector('.decrement');
+                    const incrementButton = productCard.querySelector('.increment');
+                    const quantityDisplay = productCard.querySelector('.quantity');
+    
+                    decrementButton.addEventListener('click', () => {
+                        let quantity = parseInt(quantityDisplay.textContent);
+                        if (quantity > 1) {
+                            quantity--;
+                            quantityDisplay.textContent = quantity;
+                            updateCartQuantity(product.produtoId, quantity);
+                        }
+                    });
+    
+                    incrementButton.addEventListener('click', () => {
+                        let quantity = parseInt(quantityDisplay.textContent);
+                        if (quantity < maxStock) { // Limitação do stock
+                            quantity++;
+                            quantityDisplay.textContent = quantity;
+                            updateCartQuantity(product.produtoId, quantity);
+                        }
+                    });
+    
+                    promoSection.appendChild(productCard);
                 }
+            });
+    
+            // Exibir o botão "Comprar Tudo"
+            const buyAllButton = document.createElement('button');
+            buyAllButton.textContent = 'Comprar Tudo';
+            buyAllButton.classList.add('buy-all-button');
+            promoSection.appendChild(buyAllButton);
+    
+            buyAllButton.addEventListener('click', () => {
+                console.log('Botão "Comprar Tudo" clicado');
+                openPurchasePopup();
+            });
+    
+            function removeProductFromCart(productId, productCard) {
+                const updatedCartItems = cartItems.filter(item => item.produtoId !== productId);
+                localStorage.setItem('cart', JSON.stringify(updatedCartItems));
+                promoSection.removeChild(productCard);
             }
-
-            if (event.target.classList.contains('increment')) {
-                const card = event.target.closest('.promo-card');
-                const quantityDisplay = card.querySelector('.quantity');
-                let quantity = parseInt(quantityDisplay.textContent);
-                
-                quantity++;
-                quantityDisplay.textContent = quantity;
-                updateCartQuantity(card, quantity);
+    
+            function updateCartQuantity(productId, quantity) {
+                const cartItem = cartItems.find(item => item.produtoId === productId);
+                if (cartItem) {
+                    cartItem.quantidade = quantity;
+                }
+                localStorage.setItem('cart', JSON.stringify(cartItems));
+            }
+    
+            function openPurchasePopup() {
+                console.log('Abrindo o pop-up de compra...');
+                const popup = document.getElementById('purchase-popup');
+                const overlay = document.getElementById('overlay');
+                const form = document.getElementById('purchase-form');
+                const addressInput = document.getElementById('address');
+                const nifInput = document.getElementById('nif');
+    
+                if (user) {
+                    addressInput.value = user.morada || "";
+                    nifInput.value = user.nif || "";
+                }
+    
+                // Mostrar o pop-up e o overlay com animação
+                popup.classList.add('show');
+                overlay.classList.add('show');
+    
+                form.onsubmit = function (event) {
+                    event.preventDefault();
+                    completePurchase();
+                };
+    
+                document.getElementById('close-popup').addEventListener('click', () => {
+                    popup.classList.remove('show');
+                    overlay.classList.remove('show');
+                });
+            }
+    
+            function completePurchase() {
+                const cartItemsData = cartItems.map(item => ({
+                    produto_id: item.produtoId,
+                    quantidade: item.quantidade
+                }));
+    
+                fetch('/finalizar-compra/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({
+                        itens: cartItemsData,
+                        morada: document.getElementById('address').value,
+                        nif: document.getElementById('nif').value
+                    })
+                }).then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Compra realizada com sucesso!');
+                        localStorage.removeItem('cart');  // Limpar o carrinho após a compra
+                        document.getElementById('purchase-popup').classList.remove('show');
+                        document.getElementById('overlay').classList.remove('show');
+                        location.reload();
+                    } else {
+                        alert('Erro na compra: ' + data.error);
+                    }
+                }).catch(error => console.error('Erro:', error));
             }
         });
-
-        // Função para atualizar a quantidade no localStorage
-        function updateCartQuantity(card, quantity) {
-            const productId = parseInt(card.getAttribute('data-id'));
-            if (isNaN(productId)) {
-                console.error('ID do produto não encontrado ou inválido.');
-                return;
-            }
-
-            const cartItem = cartItems.find(item => item.produtoId === productId);
-            if (cartItem) {
-                cartItem.quantidade = quantity;
-            }
-
-            localStorage.setItem('cart', JSON.stringify(cartItems));
-        }
     </script>
+
+    
 </body>
 </html>

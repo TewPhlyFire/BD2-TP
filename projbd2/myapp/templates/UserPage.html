@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Perfil - Mercado Machado</title>
     <link rel="stylesheet" href="{% static 'css/PagarCenas.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
+
     <style>
         .content {
             display: flex;
@@ -100,13 +102,30 @@
         #save-button:hover {
             background-color: #218838; /* Cor verde mais escura ao passar o mouse */
         }
+        #logout-button {
+        background-color: #ff4d4d; /* Vermelho */
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        margin-top: 10px;
+        border-radius: 5px;
+        font-size: 16px;
+        }
+
+        #logout-button:hover {
+            background-color: #cc0000; /* Vermelho mais escuro */
+        }
+
     </style>
 </head>
 <body>
     <header class="header">
         <div class="container">
             <div class="buttonright">
-                <a class="customer-support" href="{% url 'log_out' %}">Log Out</a>
+                <a id="user-link" class="customer-support" href="{% url 'log_out' %}">
+                    <i class="fas fa-user"></i> <!-- Ícone de usuário -->
+                </a>
                 <a class="customer-support" href="{% url 'about_us' %}">About Us</a>
             </div>
             <div class="logo">
@@ -114,10 +133,23 @@
             </div>
             <div class="buttonleft">
                 <a class="customer-support" href="{% url 'folheto' %}">Folheto</a>
-                <a class="customer-support" href="{% url 'cesto' %}"><img src="{% static 'img/Vector.png' %}" alt="Cesto" style="width: 20px; height: 20px;"></a>
+                <a class="customer-support" href="{% url 'cesto' %}">
+                    <img src="{% static 'img/Vector.png' %}" alt="Cesto" style="width: 20px; height: 20px;">
+                </a>
             </div>
         </div>
     </header>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const user = JSON.parse(localStorage.getItem("user"));
+    
+            if (user && user.nif) {
+                // Atualiza o link para redirecionar para outra rota
+                document.getElementById("user-link").href = `/UserPage/${user.nif}/`;
+            }
+        });
+    </script>
+    
 
     <main class="content">
         <h2 class="form-title">Perfil</h2>
@@ -150,6 +182,9 @@
 
             <!-- Botão Editar ao lado -->
             <button type="button" id="edit-button">Editar</button>
+            <!-- Botão de Logout -->
+            <button type="button" id="logout-button">Logout</button>
+
         </div>
 
         <!-- Formulário de edição escondido inicialmente -->
@@ -200,6 +235,12 @@
         document.getElementById('edit-button').addEventListener('click', function() {
             document.querySelector('.profile-info').style.display = 'none';  // Esconde as informações do perfil
             document.getElementById('edit-form').style.display = 'block';   // Exibe o formulário de edição
+        });
+    </script>
+    <script>
+        document.getElementById('logout-button').addEventListener('click', function () {
+            localStorage.removeItem('user');  // Remove os dados do usuário do localStorage
+            window.location.href = "{% url 'home_page_login' %}";  // Redireciona para a home page
         });
     </script>
 </body>

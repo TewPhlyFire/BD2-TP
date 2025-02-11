@@ -2,6 +2,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Produto, Categoria, Cliente, Promo, ProdutoImagem
 from django.db import connection
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 from .forms import RegistroForm
 import json
 import base64
@@ -63,31 +65,44 @@ def adicionar_produto(request):
 
 # View para a página 'Cesto'
 def cesto(request):
-    # Obter todos os produtos do PostgreSQL
     produtos = Produto.objects.all()
-
-    # Criar uma lista para armazenar os produtos + imagem
     produtos_lista = []
 
     for produto in produtos:
-        # Buscar a imagem no MongoDB associada ao produto
         produto_imagem = ProdutoImagem.objects(id_prodref=produto.id_produto).first()
-
-        # Converter imagem para Base64 se existir
         imagem_base64 = base64.b64encode(produto_imagem.imagens).decode("utf-8") if produto_imagem else None
 
-        # Adicionar os dados do produto ao JSON
         produtos_lista.append({
             "id_produto": produto.id_produto,
             "nome_produto": produto.nome_produto,
-            "preco_produto": float(produto.preco),  # Converter Decimal para float para evitar erro no JSON
-            "imagem": imagem_base64  # Adiciona a imagem ao JSON
+            "preco_produto": float(produto.preco),
+            "imagem": imagem_base64,
+            "stock": produto.quantidade  # Inclui o estoque no JSON
         })
 
-    # Converter para JSON
     produtos_json = json.dumps(produtos_lista)
-
     return render(request, 'cesto.html', {'produtos': produtos_json})
+
+
+@csrf_exempt
+def finalizar_compra(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            # Aqui você pode processar os dados da compra
+            itens = data.get('itens', [])
+            morada = data.get('morada', '')
+            nif = data.get('nif', '')
+
+            # Lógica de processamento da compra
+            # Exemplo de atualização do estoque e salvar a compra, etc.
+
+            return JsonResponse({'success': True})
+
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+    else:
+        return JsonResponse({'success': False, 'error': 'Método não permitido'}, status=405)
 
 # View para a página 'DescobreMais'
 def descobre_mais(request, produto_id):
@@ -305,9 +320,6 @@ def registar(request):
     return render(request, 'register.html', {'form': form})
 
 
-# View para a página 'Registrar'
-def registrar(request):
-    return render(request, 'Registrar.html')
 
 
 
