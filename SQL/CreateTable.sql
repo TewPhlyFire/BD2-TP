@@ -33,6 +33,7 @@ CREATE TABLE Categoria
     CONSTRAINT FK_SubCat FOREIGN KEY (Id_subcategoria) REFERENCES Categoria (Id_Categoria)
 );
 
+ /*
 CREATE TABLE Produto 
 ( 
     Id_Produto              SERIAL              PRIMARY KEY      NOT NULL, 
@@ -44,7 +45,7 @@ CREATE TABLE Produto
     Quantidade              INT              DEFAULT 0, 
     
     CONSTRAINT FK_Produto_Categoria FOREIGN KEY (Id_subcategoria) REFERENCES Categoria (Id_Categoria)
-);
+);*/
 
 CREATE TABLE Promo
 (
